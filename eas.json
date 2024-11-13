@@ -9,20 +9,23 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
-      }
+      },
+      "image": "latest"
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "app-bundle"
-      }
+      },
+      "image": "latest"
     },
     "production": {
       "autoIncrement": true,
       "android": {
         "buildType": "app-bundle",
         "gradleCommand": ":app:bundleRelease"
-      }
+      },
+      "image": "latest"
     }
   },
   "submit": {
