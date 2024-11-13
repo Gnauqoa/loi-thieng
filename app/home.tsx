@@ -12,6 +12,7 @@ const HomeScreen = () => {
     >
       <Text style={{ color: "#000" }}>Home</Text>
       <Button title="Go to Details" />
+      
     </View>
   );
 };
