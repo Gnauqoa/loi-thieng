@@ -9,18 +9,12 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
-      },
-      "ios": {
-        "buildType": "simulator"
       }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "app-bundle"
-      },
-      "ios": {
-        "buildType": "app-store"
       }
     },
     "production": {
@@ -28,10 +22,6 @@
       "android": {
         "buildType": "app-bundle",
         "gradleCommand": ":app:bundleRelease"
-      },
-      "ios": {
-        "buildType": "app-store",
-        "autoIncrement": "buildNumber"
       }
     }
   },
@@ -40,11 +30,6 @@
       "android": {
         "serviceAccountKeyPath": "./path/to/google-service-account.json",
         "track": "production"
-      },
-      "ios": {
-        "appleId": "your-apple-id@example.com",
-        "ascAppId": "your-app-store-connect-app-id",
-        "appleTeamId": "YOUR_APPLE_TEAM_ID"
       }
     }
   }
