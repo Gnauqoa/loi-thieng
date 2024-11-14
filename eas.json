@@ -24,7 +24,7 @@
       "android": {
         "buildType": "app-bundle",
         "gradleCommand": ":app:bundleRelease",
-        "image": "latest" // Set image inside the android section
+        "image": "latest"
       }
     }
   },
