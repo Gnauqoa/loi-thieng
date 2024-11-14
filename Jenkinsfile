@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         EXPO_TOKEN = credentials('EXPO_TOKEN')  // Đảm bảo EXPO_TOKEN đã được cấu hình trong Jenkins credentials
-        NPM_CONFIG_CACHE = ".npm"
+        NPM_CONFIG_CACHE = "./npm"
         HOME = '.'
     }
 
