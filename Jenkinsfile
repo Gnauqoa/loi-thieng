@@ -2,8 +2,7 @@ pipeline {
     agent none  // Đặt agent cho toàn bộ pipeline, mỗi stage sẽ có agent riêng
 
     environment {
-        EXPO_TOKEN = credentials('EXPO_TOKEN')  // Đảm bảo EXPO_TOKEN đã được cấu hình trong Jenkins credentials
-                // Override HOME to WORKSPACE value
+        EXPO_TOKEN='-5cGzfOlWNXF2n9aqBqTjte-QxJuPo9TW-azJT7Q'                // Override HOME to WORKSPACE value
         HOME = "."
         // or override npm's cache directory (~/.npm)
         NPM_CONFIG_CACHE = "./npm"
@@ -19,7 +18,7 @@ pipeline {
               sh 'echo $NPM_CONFIG_CACHE'
               sh 'echo $WORKSPACE'
                 // Cài đặt eas-cli trong Docker Node.js
-                sh 'npm install -g eas-cli'
+                sh 'npm install eas-cli'
             }
         }
 
