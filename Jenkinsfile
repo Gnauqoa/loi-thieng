@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'cimg/android:2021.08.1-node' }  // Docker container với Android SDK
+        docker { image 'cimg/android:2024.11.1-node' }  // Docker container với Android SDK
     }
 
     environment {
