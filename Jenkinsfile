@@ -1,5 +1,6 @@
 pipeline {
-    agent none
+    agent none  // Đặt agent cho toàn bộ pipeline, mỗi stage sẽ có agent riêng
+
     environment {
         EXPO_TOKEN='-5cGzfOlWNXF2n9aqBqTjte-QxJuPo9TW-azJT7Q'                // Override HOME to WORKSPACE value
         HOME = "."
@@ -8,16 +9,17 @@ pipeline {
     }
 
     stages {
-        agent {
-          docker { image 'node:18' }  // Docker container với Node.js
-        }
         stage('Setup Node.js and EAS CLI') {
+            agent {
+                docker { image 'node:18' }  // Docker container với Node.js
+            }
             steps {
               sh 'echo $HOME'
               sh 'echo $NPM_CONFIG_CACHE'
               sh 'echo $WORKSPACE'
                 // Cài đặt eas-cli trong Docker Node.js
-                sh 'npm install -g eas-cli'
+              sh 'npm install -g eas-cli'
+              sh 'npm install'
             }
         }
 
