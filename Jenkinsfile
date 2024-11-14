@@ -9,25 +9,17 @@ pipeline {
     }
 
     stages {
-        stage('Setup Node.js and EAS CLI') {
-            agent {
-                docker { image 'node:18' }  // Docker container với Node.js
-            }
-            steps {
-              sh 'echo $HOME'
-              sh 'echo $NPM_CONFIG_CACHE'
-              sh 'echo $WORKSPACE'
-                // Cài đặt eas-cli trong Docker Node.js
-              sh 'npm install -g eas-cli'
-              sh 'npm install'
-            }
-        }
-
         stage('Build Android Locally') {
             agent {
-                docker { image 'cimg/android:2023.09.1' }  // Docker container với Android SDK
+                docker { image 'cimg/android:2021.08.1-node' }  // Docker container với Android SDK
             }
             steps {
+                 sh 'echo $HOME'
+                sh 'echo $NPM_CONFIG_CACHE'
+                sh 'echo $WORKSPACE'
+                    // Cài đặt eas-cli trong Docker Node.js
+                sh 'npm install -g eas-cli'
+                sh 'npm install'
                 // Xác thực với Expo nếu cần (có thể sử dụng EXPO_TOKEN khi cần)
                 sh 'echo $EXPO_TOKEN'  // In giá trị EXPO_TOKEN (hoặc có thể bỏ qua nếu không cần)
 
