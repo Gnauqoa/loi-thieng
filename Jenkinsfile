@@ -1,14 +1,15 @@
 pipeline {
-    agent none
+    agent {
+      docker { image 'cimg/android:2023.09.1' }
+      docker { image 'node:18' }
+    }
+
+    environment {
+        EXPO_TOKEN = credentials('EXPO_TOKEN')
+    }
 
     stages {
         stage('Setup') {
-            agent {
-                docker {
-                    image 'node:18'
-                    args '-u root'  // Thêm quyền root nếu cần thiết để cài đặt các gói
-                }
-            }
             steps {
                 // Cài đặt eas-cli trong Docker Node.js
                 sh 'npm install -g eas-cli'
@@ -16,9 +17,6 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            agent {
-                docker { image 'node:18' }
-            }
             steps {
                 // Cài đặt các dependency cho dự án Expo
                 sh 'npm install'
@@ -26,9 +24,6 @@ pipeline {
         }
 
         stage('Build Android Locally') {
-            agent {
-                docker { image 'cimg/android:2023.09.1' }
-            }
             steps {
                 // Xác thực với Expo nếu cần (sử dụng EAS token)
                 // sh 'eas login --token $EAS_TOKEN'
