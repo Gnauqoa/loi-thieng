@@ -6,12 +6,12 @@ pipeline {
         PATH = "${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/emulator:${PATH}"
     }
     stages {
-        stage('Setup Node.js') {
+         stage('Install Node.js') {
             steps {
-                // Install Node.js version specified
+                // Direct installation without sudo
                 sh '''
-                curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
-                sudo apt-get install -y nodejs
+                curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
+                apt-get install -y nodejs
                 '''
             }
         }
@@ -42,14 +42,14 @@ pipeline {
             }
         }
 
-        stage('Build iOS Locally') {
-            steps {
-                script {
-                    // Run the local build for iOS (requires macOS machine with Xcode)
-                    sh 'eas build --platform ios --local'
-                }
-            }
-        }
+        // stage('Build iOS Locally') {
+        //     steps {
+        //         script {
+        //             // Run the local build for iOS (requires macOS machine with Xcode)
+        //             sh 'eas build --platform ios --local'
+        //         }
+        //     }
+        // }
     }
     post {
         success {
