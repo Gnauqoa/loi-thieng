@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-      docker { image 'node:18' }  // Docker container với Node.js
-    }
+    agent none
     environment {
         EXPO_TOKEN='-5cGzfOlWNXF2n9aqBqTjte-QxJuPo9TW-azJT7Q'                // Override HOME to WORKSPACE value
         HOME = "."
