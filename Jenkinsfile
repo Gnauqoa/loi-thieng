@@ -19,7 +19,7 @@ pipeline {
               sh 'echo $NPM_CONFIG_CACHE'
               sh 'echo $WORKSPACE'
                 // Cài đặt eas-cli trong Docker Node.js
-                sh 'npm install  eas-cli'
+                sh 'npm install -g eas-cli'
             }
         }
 
