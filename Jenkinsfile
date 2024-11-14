@@ -12,7 +12,7 @@ pipeline {
             }
             steps {
                 // Cài đặt eas-cli trong Docker Node.js
-                sh 'sudo npm install -g eas-cli'
+                sh 'npm install -g eas-cli'
             }
         }
 
@@ -22,7 +22,7 @@ pipeline {
             }
             steps {
                 // Cài đặt các dependency cho dự án Expo
-                sh 'sudo npm install'
+                sh 'npm install'
             }
         }
 
