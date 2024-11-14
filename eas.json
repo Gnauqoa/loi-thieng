@@ -1,39 +1,57 @@
 {
   "cli": {
-    "version": ">= 13.1.1",
-    "appVersionSource": "remote"
+    "version": ">= 0.60.0"
   },
   "build": {
     "development": {
-      "developmentClient": true,
       "distribution": "internal",
       "android": {
-        "buildType": "apk",
-        "image": "latest"
-      }
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      },
+      "channel": "development"
     },
     "preview": {
       "distribution": "internal",
-      "android": {
-        "buildType": "app-bundle",
-        "image": "latest"
-      }
+      "channel": "preview"
     },
     "production": {
-      "autoIncrement": true,
+      "channel": "production"
+    },
+    "test": {
       "android": {
-        "buildType": "app-bundle",
-        "gradleCommand": ":app:bundleRelease",
-        "image": "latest"
-      }
+        "gradleCommand": ":app:assembleRelease :app:assembleAndroidTest -DtestBuildType=release",
+        "withoutCredentials": true
+      },
+      "ios": {
+        "simulator": true
+      },
+      "buildArtifactPaths": [
+        "artifacts/**/*.png"
+      ],
+      "channel": "test"
+    },
+    "test_debug": {
+      "android": {
+        "gradleCommand": ":app:assembleDebug :app:assembleAndroidTest -DtestBuildType=debug",
+        "withoutCredentials": true
+      },
+      "ios": {
+        "buildConfiguration": "Debug",
+        "simulator": true
+      },
+      "env": {
+        "EXPO_USE_UPDATES": "1"
+      },
+      "buildArtifactPaths": [
+        "artifacts/**/*.png"
+      ],
+      "channel": "test_debug"
     }
   },
   "submit": {
-    "production": {
-      "android": {
-        "serviceAccountKeyPath": "./path/to/google-service-account.json",
-        "track": "production"
-      }
-    }
+    "production": {}
   }
 }
