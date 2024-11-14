@@ -8,24 +8,24 @@
       "developmentClient": true,
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
-      },
-      "image": "latest"
+        "buildType": "apk",
+        "image": "latest"
+      }
     },
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "app-bundle"
-      },
-      "image": "latest"
+        "buildType": "app-bundle",
+        "image": "latest"
+      }
     },
     "production": {
       "autoIncrement": true,
       "android": {
         "buildType": "app-bundle",
-        "gradleCommand": ":app:bundleRelease"
-      },
-      "image": "latest"
+        "gradleCommand": ":app:bundleRelease",
+        "image": "latest" // Set image inside the android section
+      }
     }
   },
   "submit": {
