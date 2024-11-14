@@ -1,62 +1,58 @@
 pipeline {
-    agent any
-    environment {
-        NODE_VERSION = '18'
-        ANDROID_SDK_ROOT = "/Users/quang/Library/Android/sdk/tools/bin"  // Update this path to your Android SDK location
-        PATH = "${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin:${ANDROID_SDK_ROOT}/platform-tools:${ANDROID_SDK_ROOT}/emulator:${PATH}"
-    }
+    agent none
+
     stages {
-         stage('Install Node.js') {
-            steps {
-                // Direct installation without sudo
-                sh '''
-                curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
-                apt-get install -y nodejs
-                '''
+        stage('Setup') {
+            agent {
+                docker {
+                    image 'node:18'
+                    args '-u root'  // Thêm quyền root nếu cần thiết để cài đặt các gói
+                }
             }
-        }
-        
-        stage('Install EAS CLI') {
             steps {
-                // Install EAS CLI globally
+                // Cài đặt eas-cli trong Docker Node.js
                 sh 'npm install -g eas-cli'
             }
         }
 
         stage('Install Dependencies') {
+            agent {
+                docker { image 'node:18' }
+            }
             steps {
-                // Install project dependencies
+                // Cài đặt các dependency cho dự án Expo
                 sh 'npm install'
             }
         }
 
         stage('Build Android Locally') {
+            agent {
+                docker { image 'cimg/android:2023.09.1' }
+            }
             steps {
-                script {
-                    // Authenticate with EAS (if required, ensure EAS credentials are set in Jenkins)
-                    sh 'eas login --token $EAS_TOKEN'
-
-                    // Run the local build for Android
-                    sh 'eas build --platform android --local'
-                }
+                // Xác thực với Expo nếu cần (sử dụng EAS token)
+                // sh 'eas login --token $EAS_TOKEN'
+                sh 'cat $EXPO_TOKEN'
+                
+                // Thực hiện build local cho nền tảng Android
+                sh 'EXPO_TOKEN=$EXPO_TOKEN eas build --platform android --local'
             }
         }
 
         // stage('Build iOS Locally') {
+        //     agent {
+        //         docker { image 'cimg/android:2023.09.1' }
+        //     }
         //     steps {
-        //         script {
-        //             // Run the local build for iOS (requires macOS machine with Xcode)
-        //             sh 'eas build --platform ios --local'
-        //         }
+        //         // Thực hiện build local cho nền tảng iOS
+        //         sh 'eas build --platform ios --local'
         //     }
         // }
     }
+
     post {
-        success {
-            echo 'Build succeeded!'
-        }
-        failure {
-            echo 'Build failed.'
+        always {
+            cleanWs()
         }
     }
 }
