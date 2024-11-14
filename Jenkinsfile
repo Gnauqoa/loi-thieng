@@ -1,5 +1,5 @@
 pipeline {
-    agent none  // Đặt agent cho các stage cụ thể
+    agent none  // Đặt agent cho toàn bộ pipeline, mỗi stage sẽ có agent riêng
 
     environment {
         EXPO_TOKEN = credentials('EXPO_TOKEN')  // Đảm bảo EXPO_TOKEN đã được cấu hình trong Jenkins credentials
@@ -8,32 +8,31 @@ pipeline {
     stages {
         stage('Setup Node.js and EAS CLI') {
             agent {
-                docker { image 'node:18' }
+                docker { image 'node:18' }  // Docker container với Node.js
             }
             steps {
                 // Cài đặt eas-cli trong Docker Node.js
-                sh 'npm install -g eas-cli'
+                sh 'sudo npm install -g eas-cli'
             }
         }
 
         stage('Install Dependencies') {
             agent {
-                docker { image 'node:18' }
+                docker { image 'node:18' }  // Docker container với Node.js
             }
             steps {
                 // Cài đặt các dependency cho dự án Expo
-                sh 'npm install'
+                sh 'sudo npm install'
             }
         }
 
         stage('Build Android Locally') {
             agent {
-                docker { image 'cimg/android:2023.09.1' }
+                docker { image 'cimg/android:2023.09.1' }  // Docker container với Android SDK
             }
             steps {
                 // Xác thực với Expo nếu cần (có thể sử dụng EXPO_TOKEN khi cần)
-                // In giá trị của EXPO_TOKEN (hoặc có thể bỏ qua nếu không cần in ra)
-                sh 'echo $EXPO_TOKEN' 
+                sh 'echo $EXPO_TOKEN'  // In giá trị EXPO_TOKEN (hoặc có thể bỏ qua nếu không cần)
 
                 // Thực hiện build local cho nền tảng Android
                 sh 'EXPO_TOKEN=$EXPO_TOKEN eas build --platform android --local'
