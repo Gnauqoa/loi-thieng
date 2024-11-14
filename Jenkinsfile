@@ -1,6 +1,8 @@
 pipeline {
-    agent none  // Đặt agent cho toàn bộ pipeline, mỗi stage sẽ có agent riêng
-
+    agent {
+      docker { image 'node:18' }  // Docker container với Node.js
+      docker { image 'cimg/android:2023.09.1' }  // Docker container với Android SDK
+    }
     environment {
         EXPO_TOKEN='-5cGzfOlWNXF2n9aqBqTjte-QxJuPo9TW-azJT7Q'                // Override HOME to WORKSPACE value
         HOME = "."
@@ -10,22 +12,16 @@ pipeline {
 
     stages {
         stage('Setup Node.js and EAS CLI') {
-            agent {
-                docker { image 'node:18' }  // Docker container với Node.js
-            }
             steps {
               sh 'echo $HOME'
               sh 'echo $NPM_CONFIG_CACHE'
               sh 'echo $WORKSPACE'
                 // Cài đặt eas-cli trong Docker Node.js
-                sh 'npm -g install eas-cli'
+                sh 'npm install -g eas-cli'
             }
         }
 
         stage('Install Dependencies') {
-            agent {
-                docker { image 'node:18' }  // Docker container với Node.js
-            }
             steps {
                 // Cài đặt các dependency cho dự án Expo
                 sh 'npm install'
@@ -33,9 +29,6 @@ pipeline {
         }
 
         stage('Build Android Locally') {
-            agent {
-                docker { image 'cimg/android:2023.09.1' }  // Docker container với Android SDK
-            }
             steps {
                 // Xác thực với Expo nếu cần (có thể sử dụng EXPO_TOKEN khi cần)
                 sh 'echo $EXPO_TOKEN'  // In giá trị EXPO_TOKEN (hoặc có thể bỏ qua nếu không cần)
