@@ -4,9 +4,9 @@ pipeline {
     environment {
         EXPO_TOKEN = credentials('EXPO_TOKEN')  // Đảm bảo EXPO_TOKEN đã được cấu hình trong Jenkins credentials
                 // Override HOME to WORKSPACE value
-        HOME = "${WORKSPACE}"
+        HOME = "."
         // or override npm's cache directory (~/.npm)
-        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+        NPM_CONFIG_CACHE = "./npm"
     }
 
     stages {
