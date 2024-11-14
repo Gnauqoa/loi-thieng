@@ -1,5 +1,7 @@
 pipeline {
-    agent none  // Đặt agent cho toàn bộ pipeline, mỗi stage sẽ có agent riêng
+    agent {
+        docker { image 'cimg/android:2021.08.1-node' }  // Docker container với Android SDK
+    }
 
     environment {
         EXPO_TOKEN='-5cGzfOlWNXF2n9aqBqTjte-QxJuPo9TW-azJT7Q'                // Override HOME to WORKSPACE value
@@ -10,9 +12,7 @@ pipeline {
 
     stages {
         stage('Build Android Locally') {
-            agent {
-                docker { image 'cimg/android:2021.08.1-node' }  // Docker container với Android SDK
-            }
+           
             steps {
                  sh 'echo $HOME'
                 sh 'echo $NPM_CONFIG_CACHE'
