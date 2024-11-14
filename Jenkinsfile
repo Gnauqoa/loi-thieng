@@ -3,8 +3,10 @@ pipeline {
 
     environment {
         EXPO_TOKEN = credentials('EXPO_TOKEN')  // Đảm bảo EXPO_TOKEN đã được cấu hình trong Jenkins credentials
-        NPM_CONFIG_CACHE = "./npm"
-        HOME = '.'
+                // Override HOME to WORKSPACE value
+        HOME = "${WORKSPACE}"
+        // or override npm's cache directory (~/.npm)
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     }
 
     stages {
@@ -13,6 +15,9 @@ pipeline {
                 docker { image 'node:18' }  // Docker container với Node.js
             }
             steps {
+              sh 'echo $HOME'
+              sh 'echo $NPM_CONFIG_CACHE'
+              sh 'echo $WORKSPACE'
                 // Cài đặt eas-cli trong Docker Node.js
                 sh 'npm install -g eas-cli'
             }
