@@ -1,55 +1,16 @@
 {
   "cli": {
-    "version": ">= 0.60.0"
+    "version": ">= 7.3.0"
   },
   "build": {
     "development": {
-      "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      },
-      "ios": {
-        "buildConfiguration": "Debug"
-      },
-      "channel": "development"
+      "developmentClient": true,
+      "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "channel": "preview"
+      "distribution": "internal"
     },
-    "production": {
-      "channel": "production"
-    },
-    "test": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease :app:assembleAndroidTest -DtestBuildType=release",
-        "withoutCredentials": true
-      },
-      "ios": {
-        "simulator": true
-      },
-      "buildArtifactPaths": [
-        "artifacts/**/*.png"
-      ],
-      "channel": "test"
-    },
-    "test_debug": {
-      "android": {
-        "gradleCommand": ":app:assembleDebug :app:assembleAndroidTest -DtestBuildType=debug",
-        "withoutCredentials": true
-      },
-      "ios": {
-        "buildConfiguration": "Debug",
-        "simulator": true
-      },
-      "env": {
-        "EXPO_USE_UPDATES": "1"
-      },
-      "buildArtifactPaths": [
-        "artifacts/**/*.png"
-      ],
-      "channel": "test_debug"
-    }
+    "production": {}
   },
   "submit": {
     "production": {}
