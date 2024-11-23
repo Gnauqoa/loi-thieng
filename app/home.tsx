@@ -10,9 +10,10 @@ const HomeScreen = () => {
         justifyContent: "center",
       }}
     >
-      <Text style={{ color: "#000" }}>Home</Text>
+      <Text className="color-black text-center text-xl font-bold">
+        Join meetin
+      </Text>
       <Button title="Go to Details" />
-      
     </View>
   );
 };
