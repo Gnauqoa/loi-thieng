@@ -1,13 +1,13 @@
-import { initializeFirestore } from 'firebase/firestore';
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { FirebaseApp, initializeApp } from "firebase/app";
+import { Analytics, getAnalytics } from "firebase/analytics";
+import {
+  Firestore,
+  initializeFirestore,
+  FirestoreSettings,
+} from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+// Firebase configuration
+const firebaseConfig: Record<string, string> = {
   apiKey: "AIzaSyC-eJXp2x1OovDP6eCgQmVRgUU_gdn3PyY",
   authDomain: "loi-thieng-fd643.firebaseapp.com",
   projectId: "loi-thieng-fd643",
@@ -18,9 +18,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+const app: FirebaseApp = initializeApp(firebaseConfig);
 
-export const db = initializeFirestore(app, {
+// Optional: Initialize Analytics (if used in your project)
+// Uncomment if you want to use analytics
+// const analytics: Analytics = getAnalytics(app);
+
+// Firestore settings for better compatibility
+const firestoreSettings: FirestoreSettings = {
   experimentalForceLongPolling: true,
-});
+};
+
+// Initialize Firestore
+export const db: Firestore = initializeFirestore(app, firestoreSettings);
