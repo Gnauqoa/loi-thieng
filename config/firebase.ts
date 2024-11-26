@@ -1,33 +1,39 @@
-import { FirebaseApp, initializeApp } from "firebase/app";
-import { Analytics, getAnalytics } from "firebase/analytics";
+import { FirebaseApp, getApps, initializeApp } from "firebase/app";
+import {
+  getAuth,
+  getReactNativePersistence,
+  initializeAuth,
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Firestore,
   initializeFirestore,
   FirestoreSettings,
 } from "firebase/firestore";
 
-// Firebase configuration
-const firebaseConfig: Record<string, string> = {
-  apiKey: "AIzaSyC-eJXp2x1OovDP6eCgQmVRgUU_gdn3PyY",
-  authDomain: "loi-thieng-fd643.firebaseapp.com",
-  projectId: "loi-thieng-fd643",
-  storageBucket: "loi-thieng-fd643.firebasestorage.app",
-  messagingSenderId: "928570948109",
-  appId: "1:928570948109:web:5e6293632d05e1adfff344",
-  measurementId: "G-N20TWDLFHQ",
+const decodeFirebaseConfig = (
+  base64Config: string | undefined | null
+): Record<string, string> => {
+  if (!base64Config) return {};
+  const decodedString = atob(base64Config); // Decode Base64 to string
+  return JSON.parse(decodedString); // Parse string to JSON object
 };
 
-// Initialize Firebase
-const app: FirebaseApp = initializeApp(firebaseConfig);
+const firebaseConfig = decodeFirebaseConfig(
+  process.env.EXPO_PUBLIC_FIREBASE_CONFIG || ""
+);
 
-// Optional: Initialize Analytics (if used in your project)
-// Uncomment if you want to use analytics
-// const analytics: Analytics = getAnalytics(app);
+const app: FirebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Firestore settings for better compatibility
+export const auth =
+  getAuth() ??
+  initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage),
+  });
+
 const firestoreSettings: FirestoreSettings = {
   experimentalForceLongPolling: true,
 };
 
-// Initialize Firestore
 export const db: Firestore = initializeFirestore(app, firestoreSettings);
