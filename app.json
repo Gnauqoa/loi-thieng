@@ -29,7 +29,8 @@
     },
     "plugins": [
       "expo-router",
-      "@config-plugins/react-native-webrtc"
+      "@config-plugins/react-native-webrtc",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
