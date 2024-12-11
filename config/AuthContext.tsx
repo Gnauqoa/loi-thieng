@@ -1,10 +1,10 @@
-import { Children, createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from 'axios'
 import * as SecureStore from 'expo-secure-store';
 
 interface AuthProps {
     authState?: { token: String | null; authenticated: boolean | null };
-    onRegister?: (account: String, password: String) => Promise<any>;
+    onRegister?: (username: String, email: String, password: String, firstName: String, lastName: String, birth: String) => Promise<any>;
     onLogin?: (account: String, password: String) => Promise<any>;
     onLogout?: () => Promise<any>;
 }
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }: any) => {
     useEffect(() => {
         const loadToken = async () => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
-            console.log('Found Token:', token);
+            //console.log('Found Token:', token);
             if (token) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
                 setAuthState({
@@ -41,13 +41,16 @@ export const AuthProvider = ({ children }: any) => {
         loadToken();
     }, []);
 
-    
 
-    const register = async (account: String, password: String) => {
+
+    const register = async (username: String, email: String, password: String, first_name: String, last_name: String, birth: String) => {
         try {
-            return await axios.post(`${API_URL}/sign_up`, { account, password });
+            const result = await axios.post(`${API_URL}`, { username, email, password, first_name, last_name, birth });
+            console.log(result);
+            return result;
         } catch (e) {
-            return { error: true, msg: (e as any)};
+            console.log(e);
+            return { error: true, msg: (e as any) };
         }
     };
 
@@ -66,7 +69,7 @@ export const AuthProvider = ({ children }: any) => {
             await SecureStore.setItemAsync(TOKEN_KEY, result.data.data.access_token);
             return result;
         } catch (e) {
-            return { error: true, msg: (e as any)};
+            return { error: true, msg: (e as any) };
         }
     };
 
