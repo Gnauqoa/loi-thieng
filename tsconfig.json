@@ -12,7 +12,7 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "config/tamagui.config.tsx",
+    "src/config/tamagui.config.tsx",
     "nativewind-env.d.ts"
   ]
 }

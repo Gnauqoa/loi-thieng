@@ -1,7 +1,7 @@
 import "@expo/metro-runtime"; // Necessary for Fast Refresh on Web
 import { registerRootComponent } from "expo";
 
-import App from "./app/index";
+import App from "./src/index";
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,

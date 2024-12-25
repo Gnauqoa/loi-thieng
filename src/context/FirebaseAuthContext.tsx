@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { onAuthStateChanged, signInWithCustomToken, User } from "firebase/auth";
-import { auth } from "@/config/firebase";
+import { auth } from "@/src/config/firebase";
 
 // Define the context value type
 interface AuthContextValue {
