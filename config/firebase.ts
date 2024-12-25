@@ -19,21 +19,29 @@ const decodeFirebaseConfig = (
   return JSON.parse(decodedString); // Parse string to JSON object
 };
 
+const isValidConfig = !!process.env.EXPO_PUBLIC_FIREBASE_CONFIG;
+
 const firebaseConfig = decodeFirebaseConfig(
   process.env.EXPO_PUBLIC_FIREBASE_CONFIG || ""
 );
 
-const app: FirebaseApp =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const app: FirebaseApp | null = isValidConfig
+  ? getApps().length === 0
+    ? initializeApp(firebaseConfig)
+    : getApps()[0]
+  : null;
 
-export const auth =
-  getAuth() ??
-  initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
+export const auth = app
+  ? getAuth() ??
+    initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    })
+  : null;
 
 const firestoreSettings: FirestoreSettings = {
   experimentalForceLongPolling: true,
 };
 
-export const db: Firestore = initializeFirestore(app, firestoreSettings);
+export const db: Firestore | null = app
+  ? initializeFirestore(app, firestoreSettings)
+  : null;
