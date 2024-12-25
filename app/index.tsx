@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Text, SafeAreaView } from "react-native";
 import RoomScreen from "./room";
-import JoinScreen from "./join";
+import JoinScreen from "./join2";
 import CallScreen from "./call";
 
 import "../global.css";
+import { FirebaseAuthProvider } from "@/context/FirebaseAuthContext";
 
 // Just to handle navigation
 export default function App() {
@@ -22,12 +23,7 @@ export default function App() {
   switch (screen) {
     case screens.ROOM:
       content = (
-        <RoomScreen
-          roomId={roomId}
-          setRoomId={setRoomId}
-          screens={screens}
-          setScreen={setScreen}
-        />
+        <JoinScreen roomId={roomId} screens={screens} setScreen={setScreen} />
       );
       break;
 
@@ -48,6 +44,8 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="flex-1 justify-center ">{content}</SafeAreaView>
+    <FirebaseAuthProvider>
+      <SafeAreaView className="flex-1 justify-center ">{content}</SafeAreaView>
+    </FirebaseAuthProvider>
   );
 }

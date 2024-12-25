@@ -89,6 +89,7 @@ export default function JoinScreen({
         device.kind === "videoinput" &&
         device.label.toLowerCase().includes(facing)
     )?.deviceId;
+    
     const facingMode = isFront ? "user" : "environment";
     const constraints = {
       audio: true,
