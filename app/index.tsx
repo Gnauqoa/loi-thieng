@@ -1,51 +1,28 @@
-import React, { useState } from "react";
-import { Text, SafeAreaView } from "react-native";
-import RoomScreen from "./room";
-import JoinScreen from "./join2";
-import CallScreen from "./call";
+// In App.js in a new project
 
-import "../global.css";
-import { FirebaseAuthProvider } from "@/context/FirebaseAuthContext";
+import * as React from "react";
+import { View, Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-// Just to handle navigation
-export default function App() {
-  const screens = {
-    ROOM: "JOIN_ROOM",
-    CALL: "CALL",
-    JOIN: "JOIN",
-  };
-
-  const [screen, setScreen] = useState(screens.ROOM);
-  const [roomId, setRoomId] = useState("");
-
-  let content;
-
-  switch (screen) {
-    case screens.ROOM:
-      content = (
-        <JoinScreen roomId={roomId} screens={screens} setScreen={setScreen} />
-      );
-      break;
-
-    case screens.CALL:
-      content = (
-        <CallScreen roomId={roomId} screens={screens} setScreen={setScreen} />
-      );
-      break;
-
-    case screens.JOIN:
-      content = (
-        <JoinScreen roomId={roomId} screens={screens} setScreen={setScreen} />
-      );
-      break;
-
-    default:
-      content = <Text>Wrong Screen</Text>;
-  }
-
+function HomeScreen() {
   return (
-    <FirebaseAuthProvider>
-      <SafeAreaView className="flex-1 justify-center ">{content}</SafeAreaView>
-    </FirebaseAuthProvider>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Home Screen</Text>
+    </View>
   );
 }
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
