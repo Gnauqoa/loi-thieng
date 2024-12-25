@@ -5,6 +5,7 @@ import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FirebaseAuthProvider } from "@/src/context/FirebaseAuthContext";
+import TamaguiProvider from "./config/tamagui.config";
 
 function HomeScreen() {
   return (
@@ -18,13 +19,15 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <FirebaseAuthProvider>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-        </Stack.Navigator>
-      </FirebaseAuthProvider>
-    </NavigationContainer>
+    <FirebaseAuthProvider>
+      <TamaguiProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" component={HomeScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </TamaguiProvider>
+    </FirebaseAuthProvider>
   );
 }
 
