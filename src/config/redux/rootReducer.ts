@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 // slices
+import authReducer from "./slices/auth";
 import postReducer from "./slices/post";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer } from "redux-persist";
@@ -15,6 +16,7 @@ const rootPersistConfig = {
 
 const rootReducer = combineReducers({
   post: postReducer,
+  auth: authReducer,
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

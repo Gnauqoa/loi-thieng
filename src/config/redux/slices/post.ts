@@ -1,6 +1,6 @@
 import axios from "../../../utils/axios";
 import { createSlice } from "@reduxjs/toolkit";
-import { dispatch } from "../store";
+import { dispatch, useSelector } from "../store";
 import {
   deletePostAPI,
   deletePostsAPI,
@@ -8,9 +8,9 @@ import {
   GetPostsParams,
   updatePostAPI,
   UpdatePostPayload,
-} from "@/src/apis/post";
-import { Post } from "@/src/@types/post";
-import { PaginationMeta } from "@/src/@types/pagination";
+} from "@/apis/post";
+import { Post } from "@/@types/post";
+import { PaginationMeta } from "@/@types/pagination";
 import { AxiosError } from "axios";
 
 // ----------------------------------------------------------------------
