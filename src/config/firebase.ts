@@ -12,13 +12,11 @@ import {
   initializeFirestore,
   FirestoreSettings,
 } from "firebase/firestore";
+import { decode } from "base-64";
 
-const decodeFirebaseConfig = (
-  base64Config: string | undefined | null
-): Record<string, string> => {
-  if (!base64Config) return {};
-  const decodedString = atob(base64Config); // Decode Base64 to string
-  return JSON.parse(decodedString); // Parse string to JSON object
+const decodeFirebaseConfig = (base64String: string) => {
+  const jsonString = decode(base64String); // Decode Base64 to JSON string
+  return JSON.parse(jsonString + '"}'); // Parse JSON string back into an object
 };
 
 const isValidConfig = !!process.env.EXPO_PUBLIC_FIREBASE_CONFIG;
@@ -26,6 +24,21 @@ const isValidConfig = !!process.env.EXPO_PUBLIC_FIREBASE_CONFIG;
 const firebaseConfig = decodeFirebaseConfig(
   process.env.EXPO_PUBLIC_FIREBASE_CONFIG || ""
 );
+
+console.log("firebaseConfig", firebaseConfig);
+
+const app: FirebaseApp | null = isValidConfig
+  ? getApps().length === 0
+    ? initializeApp(firebaseConfig)
+    : getApps()[0]
+  : null;
+
+export const auth = app
+  ? getAuth() ??
+    initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    })
+  : null;
 
 export const signInFirebaseWithToken = async (
   token: string
@@ -43,19 +56,6 @@ export const signInFirebaseWithToken = async (
     }
   });
 };
-
-const app: FirebaseApp | null = isValidConfig
-  ? getApps().length === 0
-    ? initializeApp(firebaseConfig)
-    : getApps()[0]
-  : null;
-
-export const auth = app
-  ? getAuth() ??
-    initializeAuth(app, {
-      persistence: getReactNativePersistence(AsyncStorage),
-    })
-  : null;
 
 const firestoreSettings: FirestoreSettings = {
   experimentalForceLongPolling: true,

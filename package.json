@@ -26,6 +26,7 @@
     "@tamagui/config": "^1.116.12",
     "@tamagui/core": "^1.116.12",
     "axios": "^1.7.9",
+    "base-64": "^1.0.0",
     "burnt": "^0.12.2",
     "expo": "~51.0.39",
     "expo-constants": "~16.0.2",

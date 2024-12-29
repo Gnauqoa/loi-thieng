@@ -5,9 +5,15 @@ import { isValidToken, setSession } from "@/utils/jwt";
 import { getCurrentUser, signIn } from "@/apis/auth";
 import { AuthState, AuthUser, FirebaseUser } from "@/@types/auth";
 import { toastSuccess } from "@/utils/toast";
-import { getFirebaseToken, getToken } from "@/utils/local-storage";
+import {
+  getFirebaseToken,
+  getToken,
+  removeFirebaseToken,
+  removeToken,
+} from "@/utils/local-storage";
 import axios from "@/utils/axios";
-import { signInFirebaseWithToken } from "@/config/firebase";
+import { auth, signInFirebaseWithToken } from "@/config/firebase";
+import { onAuthStateChanged, UserCredential } from "@firebase/auth";
 // ----------------------------------------------------------------------
 
 const initialState: AuthState = {
@@ -39,8 +45,8 @@ const slice = createSlice({
       state.isLoading = false;
       state.isInitialized = true;
       state.isAuthenticated = action.payload.isAuthenticated;
-      state.user = action.payload.user;
-      state.firebaseUser = action.payload.firebaseUser;
+      state.user = action.payload?.user || state.user;
+      state.firebaseUser = action.payload?.firebaseUser || state.firebaseUser;
     },
 
     // LOGIN
@@ -48,6 +54,7 @@ const slice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = true;
       state.user = action.payload.user;
+      state.firebaseUser = action.payload.firebaseUser;
     },
 
     // LOGOUT
@@ -85,6 +92,17 @@ export const {
 export function initializeAuth() {
   return async () => {
     dispatch(slice.actions.startLoading());
+    if (auth)
+      onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+          dispatch(
+            slice.actions.initializeAuthSuccess({
+              isAuthenticated: true,
+              firebaseUser: firebaseUser,
+            })
+          );
+        }
+      });
 
     try {
       const accessToken = typeof window !== "undefined" ? await getToken() : "";
@@ -124,7 +142,14 @@ export function login(credentials: { account: string; password: string }) {
       const response = await signIn(credentials);
       const user = response.data.data.user;
       toastSuccess(`Welcome ${user.role}: ${user.username || user.email}`);
-      dispatch(slice.actions.loginSuccess({ user }));
+
+      const firebaseToken = response.data.data.firebase_token;
+
+      const firebaseUser: FirebaseUser = (
+        await signInFirebaseWithToken(firebaseToken)
+      ).user;
+
+      dispatch(slice.actions.loginSuccess({ user, firebaseUser }));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
@@ -136,7 +161,9 @@ export function logout() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      setSession(null);
+      await removeToken();
+      await removeFirebaseToken();
+      axios.defaults.headers.common["Authorization"] = "";
       dispatch(slice.actions.logoutSuccess());
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
