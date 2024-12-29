@@ -1,84 +1,51 @@
-import { Toast } from "toastify-react-native";
-import { ToastManagerState } from "toastify-react-native/utils/interfaces";
+import Toast, { ToastShowParams } from "react-native-toast-message";
 
-export const TOP_LEFT = "top-left";
-export const TOP_RIGHT = "top-right";
-export const TOP_CENTER = "top-center";
-export const BOTTOM_LEFT = "bottom-left";
-export const BOTTOM_RIGHT = "bottom-right";
-export const BOTTOM_CENTER = "bottom-center";
+export const TOP = "top";
+export const BOTTOM = "bottom";
 
-const TOAST_DEFAULT_OPTIONS = {
-  position: TOP_RIGHT,
-  autoClose: 3000,
-  pauseOnHover: true,
-  closeOnClick: true,
-  hideProgressBar: false,
+const TOAST_DEFAULT_OPTIONS: ToastShowParams = {
+  position: TOP,
 };
 
-const TOAST_SUCCESS = "TOAST_SUCCESS";
-const TOAST_ERROR = "TOAST_ERROR";
-const TOAST_WARN = "TOAST_WARN";
-const TOAST_INFO = "TOAST_INFO";
-const TOAST_DEFAULT = "TOAST_DEFAULT";
+const TOAST_TYPES = {
+  SUCCESS: "success",
+  ERROR: "error",
+  INFO: "info",
+  DEFAULT: "default",
+};
 
-export const getToastFunction: any =
-  (type: string, options?: ToastManagerState) => (message: string) => {
-    const optsMerge = Object.assign({}, TOAST_DEFAULT_OPTIONS, options);
-    let doToast: any = null;
-    switch (type) {
-      case TOAST_SUCCESS:
-        doToast = Toast.success;
-        break;
-      case TOAST_ERROR:
-        doToast = Toast.error;
-        break;
-      case TOAST_WARN:
-        doToast = Toast.warn;
-        break;
-      case TOAST_INFO:
-        doToast = Toast.info;
-        break;
-      case TOAST_DEFAULT:
-        doToast = Toast;
-        break;
-      default:
-        return doToast;
-    }
-    return doToast(message, optsMerge);
-  };
+const showToast = (
+  type: string,
+  message: string,
+  options?: ToastShowParams
+) => {
+  const optsMerge = { ...TOAST_DEFAULT_OPTIONS, ...options };
+  console.log({ optsMerge });
+  Toast.show({
+    type,
+    text1: message,
+    ...optsMerge,
+  });
+};
 
-export const toastSuccess: any = (
+export const toastSuccess = (
   message = "Success",
-  options?: ToastManagerState
+  options?: ToastShowParams
 ) => {
-  getToastFunction(TOAST_SUCCESS, options)(message);
+  showToast(TOAST_TYPES.SUCCESS, message, options);
 };
 
-export const toastError: any = (
-  message = "Error",
-  options?: ToastManagerState
-) => {
-  getToastFunction(TOAST_ERROR, options)(message);
+export const toastError = (message = "Error", options?: ToastShowParams) => {
+  showToast(TOAST_TYPES.ERROR, message, options);
 };
 
-export const toastWarn: any = (
-  message = "Warning",
-  options?: ToastManagerState
-) => {
-  getToastFunction(TOAST_WARN, options)(message);
+export const toastInfo = (message = "Info", options?: ToastShowParams) => {
+  showToast(TOAST_TYPES.INFO, message, options);
 };
 
-export const toastInfo: any = (
-  message = "Info",
-  options?: ToastManagerState
-) => {
-  getToastFunction(TOAST_INFO, options)(message);
-};
-
-export const toastDefault: any = (
+export const toastDefault = (
   message = "Default",
-  options?: ToastManagerState
+  options?: ToastShowParams
 ) => {
-  getToastFunction(TOAST_DEFAULT, options)(message);
+  showToast(TOAST_TYPES.DEFAULT, message, options);
 };
