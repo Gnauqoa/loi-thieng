@@ -1,4 +1,4 @@
-import { UserCredential } from "firebase/auth";
+import { UserCredential, User as _FirebaseUser } from "firebase/auth";
 
 // ----------------------------------------------------------------------
 
@@ -14,11 +14,13 @@ export type ActionMap<M extends { [index: string]: any }> = {
 };
 
 export type AuthUser = null | Record<string, any>;
+export type FirebaseUser = _FirebaseUser;
 
 export type AuthState = {
   isAuthenticated: boolean;
   isInitialized: boolean;
   user: AuthUser;
+  firebaseUser: FirebaseUser | null;
   isLoading: boolean;
   error: string | null;
 };
