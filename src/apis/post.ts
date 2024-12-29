@@ -1,10 +1,10 @@
-import { Post } from "@/src/@types/post";
+import { Post } from "@/@types/post";
 import axios from "../utils/axios";
 import {
   DataResponse,
   PaginationParams,
   PaginationResponse,
-} from "@/src/@types/pagination";
+} from "@/@types/pagination";
 
 export type GetPostsParams = {
   content?: string;
