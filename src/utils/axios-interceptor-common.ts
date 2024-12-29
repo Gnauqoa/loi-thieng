@@ -1,34 +1,27 @@
-import { getToken, saveToken } from "./local-storage";
+import { signInFirebaseWithToken } from "@/config/firebase";
+import {
+  getFirebaseToken,
+  getToken,
+  saveFirebaseToken,
+  saveToken,
+} from "./local-storage";
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-
-const ClientID = process.env.API_CLIENT_ID || "binary-options";
 
 const interceptors = {
   request: [
     async (config: AxiosRequestConfig) => {
       const token = await getToken();
+      const firebaseToken = await getFirebaseToken();
+
       if (token) {
         config = {
           ...config,
           headers: { Authorization: `Bearer ${token}` },
         };
       }
-      if (ClientID) {
-        config = {
-          ...config,
-          headers: {
-            "Client-ID": ClientID,
-          },
-        };
-      }
-      if (ClientID && token) {
-        config = {
-          ...config,
-          headers: {
-            "Client-ID": ClientID,
-            Authorization: `Bearer ${token}`,
-          },
-        };
+
+      if (firebaseToken) {
+        await signInFirebaseWithToken(firebaseToken);
       }
 
       return config;
@@ -38,6 +31,7 @@ const interceptors = {
     async (response: AxiosResponse) => {
       if ("/users/users/sign_in" === response.config.url) {
         await saveToken(response.data?.data?.access_token);
+        await saveFirebaseToken(response.data?.data?.firebase_token);
       }
       return response;
     },

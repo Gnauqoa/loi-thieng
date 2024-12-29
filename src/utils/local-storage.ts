@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const TOKEN_NAME = "_ut.lw";
+export const FIREBASE_TOKEN_NAME = "_ut.fb";
 const BO_RANK = "_b_r";
 
 export const saveToken = async (token: string): Promise<void> => {
@@ -17,16 +18,18 @@ export const removeToken = async (): Promise<void> => {
   await AsyncStorage.removeItem(TOKEN_NAME);
 };
 
-export const saveBoRank = async (bo_rank: string): Promise<void> => {
-  if (bo_rank) {
-    await AsyncStorage.setItem(BO_RANK, bo_rank);
+export const saveFirebaseToken = async (
+  firebase_token: string
+): Promise<void> => {
+  if (firebase_token) {
+    await AsyncStorage.setItem(FIREBASE_TOKEN_NAME, firebase_token);
   }
 };
 
-export const getBoRank = async (): Promise<string | null> => {
-  return await AsyncStorage.getItem(BO_RANK);
+export const getFirebaseToken = async (): Promise<string | null> => {
+  return await AsyncStorage.getItem(FIREBASE_TOKEN_NAME);
 };
 
-export const removeBoRank = async (): Promise<void> => {
-  await AsyncStorage.removeItem(BO_RANK);
+export const removeFirebaseToken = async (): Promise<void> => {
+  await AsyncStorage.removeItem(FIREBASE_TOKEN_NAME);
 };
