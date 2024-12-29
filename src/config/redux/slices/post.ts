@@ -193,3 +193,5 @@ export function deletePosts(ids: string[]) {
     }
   };
 }
+
+export const usePost = () => useSelector((state) => state.post);
