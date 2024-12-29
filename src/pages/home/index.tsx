@@ -9,12 +9,7 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const auth = useAuth();
   useEffect(() => {
-    console.log({ auth });
-    Toast.show({
-      type: "success",
-      text1: "Hello",
-      text2: "This is some something 👋",
-    });
+    console.log(auth);
   }, [auth]);
 
   return (
