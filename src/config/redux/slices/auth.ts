@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { dispatch, useSelector } from "../store";
+import { dispatch, useDispatch, useSelector } from "../store";
 import { isValidToken, setSession } from "@/utils/jwt";
 import { getCurrentUser, signIn } from "@/apis/auth";
 import { AuthState, AuthUser, FirebaseUser } from "@/@types/auth";
@@ -141,7 +141,7 @@ export function login(credentials: { account: string; password: string }) {
     try {
       const response = await signIn(credentials);
       const user = response.data.data.user;
-      toastSuccess(`Welcome ${user.role}: ${user.username || user.email}`);
+      toastSuccess(`Chào mừng ${user.role}: ${user.username || user.email}`);
 
       const firebaseToken = response.data.data.firebase_token;
 
@@ -190,4 +190,7 @@ export function register(credentials: {
   };
 }
 
-export const useAuth = () => useSelector((state) => state.auth);
+export const useAuth = () => ({
+  dispatch: useDispatch(),
+  ...useSelector((state) => state.auth),
+});
