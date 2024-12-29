@@ -1,24 +1,31 @@
 import { Text, View } from "@tamagui/core";
 import { Button } from "react-native";
-import axios from "../../utils/axios";
-import { AxiosError } from "axios";
+import { useDispatch } from "@/config/redux/store";
+import { login, useAuth } from "@/config/redux/slices/auth";
+import { useEffect } from "react";
+import Toast from "react-native-toast-message";
+
 const HomeScreen = () => {
+  const dispatch = useDispatch();
+  const auth = useAuth();
+  useEffect(() => {
+    console.log({ auth });
+    Toast.show({
+      type: "success",
+      text1: "Hello",
+      text2: "This is some something 👋",
+    });
+  }, [auth]);
+
   return (
     <View>
       <Text>Home screen</Text>
       <Button
         title="Login"
-        onPress={async () => {
-          try {
-            const data = await axios.post("/users/users/sign_in", {
-              account: "30453ba6fa72a6d0afa8",
-              password: "123456",
-            });
-            console.log(data);
-          } catch (error) {
-            const err = error as AxiosError;
-            console.log(err);
-          }
+        onPress={() => {
+          dispatch(
+            login({ account: "830a979ca9f4b0e76ffa", password: "123123123@q" })
+          );
         }}
       />
     </View>
