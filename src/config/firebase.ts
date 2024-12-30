@@ -16,7 +16,7 @@ import { decode } from "base-64";
 
 const decodeFirebaseConfig = (base64String: string) => {
   const jsonString = decode(base64String); // Decode Base64 to JSON string
-  return JSON.parse(jsonString + '"}'); // Parse JSON string back into an object
+  return JSON.parse(jsonString); // Parse JSON string back into an object
 };
 
 const isValidConfig = !!process.env.EXPO_PUBLIC_FIREBASE_CONFIG;
