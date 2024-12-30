@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import { PlatformPressable } from "@react-navigation/elements";
 import { Text } from "@tamagui/core";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
@@ -42,21 +42,27 @@ function TabBar({
         };
 
         return (
-          <View key={route.key} className="flex-1">
-            <View className="relative">
-              <PlatformPressable
+          <View key={route.key} className="flex flex-row flex-1 px-2">
+            <View className="flex-1 items-center justify-center">
+              <Pressable
                 accessibilityState={isFocused ? { selected: true } : {}}
                 accessibilityLabel={options.tabBarAccessibilityLabel}
                 testID={options.tabBarTestID}
                 onPress={onPress}
                 onLongPress={onLongPress}
-                className="rounded-full items-center justify-center"
+                className="items-center justify-center"
               >
-                <HomeIcon fill={isFocused ? "#673ab7" : "#222"} />
+                {options.tabBarIcon
+                  ? options.tabBarIcon({
+                      focused: isFocused,
+                      color: isFocused ? "#673ab7" : "#222",
+                      size: 24,
+                    })
+                  : null}
                 <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
                   {label as string}
                 </Text>
-              </PlatformPressable>
+              </Pressable>
             </View>
           </View>
         );

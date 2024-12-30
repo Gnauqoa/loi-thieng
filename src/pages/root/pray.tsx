@@ -1,16 +1,10 @@
 import { Text, View } from "@tamagui/core";
 import { Button } from "react-native";
 import { useDispatch } from "@/config/redux/store";
-import { login, useAuth } from "@/config/redux/slices/auth";
-import { useEffect } from "react";
-import Toast from "react-native-toast-message";
+import { login } from "@/config/redux/slices/auth";
 
-const HomeScreen = () => {
+const PrayScreen = () => {
   const dispatch = useDispatch();
-  const auth = useAuth();
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
 
   return (
     <View>
@@ -27,4 +21,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default PrayScreen;

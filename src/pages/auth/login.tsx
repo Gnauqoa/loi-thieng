@@ -10,8 +10,8 @@ const LoginScreen = () => {
   const { isLoading, dispatch } = useAuth();
 
   const [formData, setFormData] = useState({
-    account: "",
-    password: "",
+    account: "fc902ecf05e4570e091f",
+    password: "123123123@q",
   });
   const { width } = useWindowDimensions();
   const widthImg = width / 1.1;
