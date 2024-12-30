@@ -11,17 +11,12 @@ const interceptors = {
   request: [
     async (config: AxiosRequestConfig) => {
       const token = await getToken();
-      const firebaseToken = await getFirebaseToken();
 
       if (token) {
         config = {
           ...config,
           headers: { Authorization: `Bearer ${token}` },
         };
-      }
-
-      if (firebaseToken) {
-        await signInFirebaseWithToken(firebaseToken);
       }
 
       return config;
