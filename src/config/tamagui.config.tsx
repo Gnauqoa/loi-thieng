@@ -1,4 +1,7 @@
-import { TamaguiProvider, createTamagui } from "@tamagui/core";
+import {
+  TamaguiProvider as TamaguiProviderRoot,
+  createTamagui,
+} from "@tamagui/core";
 import { config } from "@tamagui/config/v3";
 import { ReactNode, FC } from "react";
 
@@ -11,8 +14,10 @@ declare module "@tamagui/core" {
   interface TamaguiCustomConfig extends Conf {}
 }
 
-const TamaguiProviderWrapper: FC<{ children: ReactNode }> = ({ children }) => {
-  return <TamaguiProvider config={tamaguiConfig}>{children}</TamaguiProvider>;
+const TamaguiProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  return (
+    <TamaguiProviderRoot config={tamaguiConfig}>{children}</TamaguiProviderRoot>
+  );
 };
 
-export default TamaguiProviderWrapper;
+export default TamaguiProvider;

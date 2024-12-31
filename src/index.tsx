@@ -1,30 +1,21 @@
 // In App.js in a new project
 
 import * as React from "react";
-import { View, Text } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { FirebaseAuthProvider } from "@/src/context/FirebaseAuthContext";
+import TamaguiProvider from "./config/tamagui.config";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "./config/redux/store";
+import RouterContainer from "./routers";
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
-
-const Stack = createNativeStackNavigator();
+import Toast from "react-native-toast-message";
 
 function App() {
   return (
-    <NavigationContainer>
-      <FirebaseAuthProvider>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-        </Stack.Navigator>
-      </FirebaseAuthProvider>
-    </NavigationContainer>
+    <ReduxProvider store={store}>
+      <TamaguiProvider>
+        <RouterContainer />
+      </TamaguiProvider>
+      <Toast />
+    </ReduxProvider>
   );
 }
 
