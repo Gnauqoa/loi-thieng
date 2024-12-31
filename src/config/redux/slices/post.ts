@@ -1,6 +1,6 @@
 import axios from "../../../utils/axios";
 import { createSlice } from "@reduxjs/toolkit";
-import { dispatch, useSelector } from "../store";
+import { dispatch, useDispatch, useSelector } from "../store";
 import {
   deletePostAPI,
   deletePostsAPI,
@@ -57,6 +57,15 @@ const slice = createSlice({
       state.per_page = action.payload.per_page;
     },
 
+    getAndPushPostsSuccess(state, action) {
+      state.isLoading = false;
+      state.items = [...(state.items || []), ...action.payload.items];
+      state.total_items = action.payload.total_items;
+      state.total_pages = action.payload.total_pages;
+      state.current_page = action.payload.current_page;
+      state.per_page = action.payload.per_page;
+    },
+
     // GET POST
     getPostSuccess(state, action) {
       state.isLoading = false;
@@ -99,6 +108,7 @@ export const {
   startLoading,
   hasError,
   getPostsSuccess,
+  getAndPushPostsSuccess,
   getPostSuccess,
   createPostSuccess,
   updatePostSuccess,
@@ -114,6 +124,18 @@ export function getPosts(params: GetPostsParams) {
     try {
       const response = await getPostsAPI(params);
       dispatch(slice.actions.getPostsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError((error as AxiosError).message));
+    }
+  };
+}
+
+export function getAndPutPosts(params: GetPostsParams) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await getPostsAPI(params);
+      dispatch(slice.actions.getAndPushPostsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
@@ -194,4 +216,7 @@ export function deletePosts(ids: string[]) {
   };
 }
 
-export const usePost = () => useSelector((state) => state.post);
+export const usePost = () => ({
+  dispatch: useDispatch(),
+  ...useSelector((state) => state.post),
+});
