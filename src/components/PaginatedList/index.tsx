@@ -5,6 +5,7 @@ import {
   FlatList,
   Text,
   ListRenderItem,
+  FlatListProps,
 } from "react-native";
 
 interface PaginatedListProps<T> {
@@ -16,6 +17,7 @@ interface PaginatedListProps<T> {
   fetchData: (param: PaginationParams) => void;
   isLoading: boolean;
   renderItem: ListRenderItem<T>;
+  className?: string;
 }
 
 const PaginatedList = <T,>(props: PaginatedListProps<T>) => {
@@ -57,6 +59,7 @@ const PaginatedList = <T,>(props: PaginatedListProps<T>) => {
 
   return (
     <FlatList
+      className={props.className}
       data={data}
       renderItem={renderItem}
       onEndReached={handleNextPage}

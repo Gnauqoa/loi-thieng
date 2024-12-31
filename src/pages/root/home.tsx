@@ -1,5 +1,5 @@
-import { Text, View } from "@tamagui/core";
-import { Button } from "react-native";
+import { Text } from "@tamagui/core";
+import { Button, View } from "react-native";
 
 import { login } from "@/config/redux/slices/auth";
 import {
@@ -25,20 +25,19 @@ const HomeScreen = () => {
     );
   }, []);
   return (
-    <View className="flex-1 px-4">
-      <PaginatedList
-        data={items}
-        total_items={total_items}
-        total_pages={total_pages}
-        current_page={current_page}
-        per_page={10}
-        isLoading={isLoading}
-        renderItem={({ item }) => <Post {...item} />}
-        fetchData={(params) => {
-          dispatch(getPosts(params));
-        }}
-      />
-    </View>
+    <PaginatedList
+      className="bg-[#fff]"
+      data={items}
+      total_items={total_items}
+      total_pages={total_pages}
+      current_page={current_page}
+      per_page={10}
+      isLoading={isLoading}
+      renderItem={({ item }) => <Post {...item} />}
+      fetchData={(params) => {
+        dispatch(getPosts(params));
+      }}
+    />
   );
 };
 
