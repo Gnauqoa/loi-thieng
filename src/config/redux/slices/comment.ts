@@ -11,9 +11,10 @@ import {
   createCommentAPI,
   CreateCommentPayload,
   likeCommentAPI,
+  unlikeCommentAPI,
 } from "@/apis/comment";
 import { Comment } from "@/@types/comment";
-import { PaginationMeta, GetByIdParams } from "@/@types/api";
+import { PaginationMeta, ReducerDataType } from "@/@types/api";
 import { AxiosError } from "axios";
 
 // ----------------------------------------------------------------------
@@ -23,6 +24,8 @@ export type CommentState = {
   error: string | null;
   comments: Record<string, Comment>;
 } & PaginationMeta<Comment>;
+
+export type CommentReducerType = ReducerDataType<Comment>;
 
 const initialState: CommentState = {
   isLoading: false,
@@ -44,6 +47,20 @@ const slice = createSlice({
       state.isLoading = true;
     },
 
+    startLoadingComment(state, action) {
+      state.items = state.items.map((comment) =>
+        comment.id === action.payload
+          ? { ...comment, isLoading: true }
+          : comment
+      );
+    },
+    hasErrorOnComment(state, action) {
+      const { id, message } = action.payload;
+      state.items = state.items.map((comment) =>
+        comment.id === id ? { ...comment, isLoading: false } : comment
+      );
+      state.error = message;
+    },
     // HAS ERROR
     hasError(state, action) {
       state.isLoading = false;
@@ -53,7 +70,10 @@ const slice = createSlice({
     // GET POSTS
     getCommentsSuccess(state, action) {
       state.isLoading = false;
-      state.items = action.payload.items;
+      state.items = action.payload.items.map((comment: Comment) => ({
+        ...comment,
+        isLoading: false,
+      }));
       state.total_items = action.payload.total_items;
       state.total_pages = action.payload.total_pages;
       state.current_page = action.payload.current_page;
@@ -67,16 +87,32 @@ const slice = createSlice({
     getAndPushCommentsSuccess(state, action) {
       state.isLoading = false;
       state.items = [...(state.items || []), ...action.payload.items];
+      state.items = state.items.map((comment: Comment) => ({
+        ...comment,
+        isLoading: false,
+      }));
       state.total_items = action.payload.total_items;
       state.total_pages = action.payload.total_pages;
       state.current_page = action.payload.current_page;
       state.per_page = action.payload.per_page;
+
+      action.payload.items.forEach((comment: Comment) => {
+        state.comments[comment.id] = comment;
+      });
     },
 
     // GET POST
     getCommentSuccess(state, action) {
       state.isLoading = false;
       state.comments[action.payload.id] = action.payload;
+
+      if (!state.items.find((comment) => comment.id === action.payload.id)) {
+        state.items = [action.payload, ...state.items];
+      } else {
+        state.items = state.items.map((comment) =>
+          comment.id === action.payload.id ? action.payload : comment
+        );
+      }
     },
 
     // CREATE POST
@@ -89,7 +125,9 @@ const slice = createSlice({
     updateCommentSuccess(state, action) {
       state.isLoading = false;
       state.items = state.items.map((comment) =>
-        comment.id === action.payload.id ? action.payload : comment
+        comment.id === action.payload.id
+          ? { ...action.payload, isLoading: false }
+          : comment
       );
     },
 
@@ -128,26 +166,36 @@ export const {
 
 // Fetch all posts
 
-export function likeComment(id: string) {
+export function likeComment(id: string | number) {
   return async () => {
-    dispatch(slice.actions.startLoading());
+    dispatch(slice.actions.startLoadingComment(id));
     try {
       const response = await likeCommentAPI(id);
       dispatch(slice.actions.updateCommentSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError((error as AxiosError).message));
+      dispatch(
+        slice.actions.hasErrorOnComment({
+          id,
+          message: (error as AxiosError).message,
+        })
+      );
     }
   };
 }
 
-export function unlikeComment(id: string) {
+export function unlikeComment(id: string | number) {
   return async () => {
-    dispatch(slice.actions.startLoading());
+    dispatch(slice.actions.startLoadingComment(id));
     try {
-      const response = await deleteCommentAPI(id);
+      const response = await unlikeCommentAPI(id);
       dispatch(slice.actions.updateCommentSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError((error as AxiosError).message));
+      dispatch(
+        slice.actions.hasErrorOnComment({
+          id,
+          message: (error as AxiosError).message,
+        })
+      );
     }
   };
 }
@@ -179,13 +227,18 @@ export function getAndPutComments(params: GetCommentsParams) {
 // Fetch a single comment by ID
 export function getComment(id: string) {
   return async () => {
-    dispatch(slice.actions.startLoading());
+    dispatch(slice.actions.startLoadingComment(id));
     try {
       const response = await axios.get(`/admins/posts/${id}`);
       dispatch(slice.actions.getCommentSuccess(response.data.data));
       return response.data.data;
     } catch (error) {
-      dispatch(slice.actions.hasError((error as AxiosError).message));
+      dispatch(
+        slice.actions.hasErrorOnComment({
+          id,
+          message: (error as AxiosError).message,
+        })
+      );
       return null;
     }
   };
@@ -217,7 +270,7 @@ export function updateComment(
   callback?: () => void
 ) {
   return async () => {
-    dispatch(slice.actions.startLoading());
+    dispatch(slice.actions.startLoadingComment(id));
     try {
       const response = await updateCommentAPI(id, payload);
       dispatch(slice.actions.updateCommentSuccess(response));
@@ -225,7 +278,12 @@ export function updateComment(
         callback();
       }
     } catch (error) {
-      dispatch(slice.actions.hasError((error as AxiosError).message));
+      dispatch(
+        slice.actions.hasErrorOnComment({
+          id,
+          message: (error as AxiosError).message,
+        })
+      );
     }
   };
 }

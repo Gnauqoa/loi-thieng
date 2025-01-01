@@ -7,14 +7,14 @@ import {
 } from "@/@types/api";
 
 export const likeCommentAPI = async (
-  id: string
+  id: string | number
 ): Promise<DataResponse<Comment>> => {
   const { data } = await axios.post(`/users/comments/${id}/like`);
   return data;
 };
 
 export const unlikeCommentAPI = async (
-  id: string
+  id: string | number
 ): Promise<DataResponse<Comment>> => {
   const { data } = await axios.delete(`/users/comments/${id}/like`);
   return data;
@@ -68,7 +68,7 @@ export const updateCommentAPI = async (
 
 // Delete a post by ID
 export const deleteCommentAPI = async (
-  id: string
+  id: string | number
 ): Promise<DataResponse<Comment>> => {
   const { data } = await axios.delete(`/users/comments/${id}`);
   return data;
