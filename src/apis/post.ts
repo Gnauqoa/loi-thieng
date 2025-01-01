@@ -4,7 +4,7 @@ import {
   DataResponse,
   PaginationParams,
   PaginationResponse,
-} from "@/@types/pagination";
+} from "@/@types/api";
 
 export type GetPostsParams = {
   content?: string;
@@ -15,6 +15,16 @@ export const getPostsAPI = async (
   params: GetPostsParams
 ): Promise<PaginationResponse<Post>> => {
   const { data } = await axios.get("/users/posts", { params });
+  return data;
+};
+
+export const likePostAPI = async (id: string): Promise<DataResponse<Post>> => {
+  const { data } = await axios.post(`/users/posts/${id}/like`);
+  return data;
+};
+
+export const unlikePostAPI = async (id: string): Promise<DataResponse<Post>> => {
+  const { data } = await axios.delete(`/users/posts/${id}/like`);
   return data;
 };
 
@@ -48,13 +58,15 @@ export type UpdatePostPayload = Partial<CreatePostPayload>;
 export const updatePostAPI = async (
   id: string,
   payload: UpdatePostPayload
-): Promise<Post> => {
+): Promise<DataResponse<Post>> => {
   const { data } = await axios.put(`/users/posts/${id}`, payload);
   return data;
 };
 
 // Delete a post by ID
-export const deletePostAPI = async (id: string): Promise<void> => {
+export const deletePostAPI = async (
+  id: string
+): Promise<DataResponse<Post>> => {
   const { data } = await axios.delete(`/users/posts/${id}`);
   return data;
 };

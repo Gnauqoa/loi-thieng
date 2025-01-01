@@ -17,6 +17,16 @@ export type DataResponse<T> = {
   data: T;
 };
 
+export type GetByIdParams = {
+  id: number | string;
+  useCache?: boolean;
+};
+
+export const defaultGetByIdParams: GetByIdParams = {
+  id: "",
+  useCache: true,
+};
+
 export type PaginationMeta<T> = {
   items: T[];
   total_items: number;

@@ -2,38 +2,40 @@ import axios from "../../../utils/axios";
 import { createSlice } from "@reduxjs/toolkit";
 import { dispatch, useDispatch, useSelector } from "../store";
 import {
-  deletePostAPI,
-  deletePostsAPI,
-  getPostsAPI,
-  GetPostsParams,
-  updatePostAPI,
-  UpdatePostPayload,
-} from "@/apis/post";
-import { Post } from "@/@types/post";
-import { PaginationMeta } from "@/@types/api";
+  deleteCommentAPI,
+  deleteCommentsAPI,
+  getCommentsAPI,
+  GetCommentsParams,
+  updateCommentAPI,
+  UpdateCommentPayload,
+  createCommentAPI,
+  CreateCommentPayload,
+} from "@/apis/comment";
+import { Comment } from "@/@types/comment";
+import { PaginationMeta, GetByIdParams } from "@/@types/api";
 import { AxiosError } from "axios";
 
 // ----------------------------------------------------------------------
 
-export type PostState = {
+export type CommentState = {
   isLoading: boolean;
   error: string | null;
-  post: Post | null;
-} & PaginationMeta<Post>;
+  comments: Record<string, Comment>;
+} & PaginationMeta<Comment>;
 
-const initialState: PostState = {
+const initialState: CommentState = {
   isLoading: false,
   error: null,
-  post: null,
+  comments: {},
   items: [],
   per_page: 0,
   total_items: 0,
   total_pages: 0,
-  current_page: 1,
+  current_page: 0,
 };
 
 const slice = createSlice({
-  name: "post",
+  name: "comment",
   initialState,
   reducers: {
     // START LOADING
@@ -48,19 +50,22 @@ const slice = createSlice({
     },
 
     // GET POSTS
-    getPostsSuccess(state, action) {
+    getCommentsSuccess(state, action) {
       state.isLoading = false;
       state.items = action.payload.items;
       state.total_items = action.payload.total_items;
       state.total_pages = action.payload.total_pages;
       state.current_page = action.payload.current_page;
       state.per_page = action.payload.per_page;
+
+      action.payload.items.forEach((comment: Comment) => {
+        state.comments[comment.id] = comment;
+      });
     },
 
-    getAndPushPostsSuccess(state, action) {
+    getAndPushCommentsSuccess(state, action) {
       state.isLoading = false;
       state.items = [...(state.items || []), ...action.payload.items];
-      console.log(state.items.length);
       state.total_items = action.payload.total_items;
       state.total_pages = action.payload.total_pages;
       state.current_page = action.payload.current_page;
@@ -68,34 +73,36 @@ const slice = createSlice({
     },
 
     // GET POST
-    getPostSuccess(state, action) {
+    getCommentSuccess(state, action) {
       state.isLoading = false;
-      state.post = action.payload;
+      state.comments[action.payload.id] = action.payload;
     },
 
     // CREATE POST
-    createPostSuccess(state, action) {
+    createCommentSuccess(state, action) {
       state.isLoading = false;
       state.items = [action.payload, ...state.items];
     },
 
     // UPDATE POST
-    updatePostSuccess(state, action) {
+    updateCommentSuccess(state, action) {
       state.isLoading = false;
-      state.items = state.items.map((post) =>
-        post.id === action.payload.id ? action.payload : post
+      state.items = state.items.map((comment) =>
+        comment.id === action.payload.id ? action.payload : comment
       );
     },
 
     // DELETE POST
-    deletePostSuccess(state, action) {
-      state.isLoading = false;
-      state.items = state.items.filter((post) => post.id !== action.payload);
-    },
-    deletePostsSuccess(state, action) {
+    deleteCommentSuccess(state, action) {
       state.isLoading = false;
       state.items = state.items.filter(
-        (post) => !action.payload.includes(post.id)
+        (comment) => comment.id !== action.payload
+      );
+    },
+    deleteCommentsSuccess(state, action) {
+      state.isLoading = false;
+      state.items = state.items.filter(
+        (comment) => !action.payload.includes(comment.id)
       );
     },
   },
@@ -108,81 +115,66 @@ export default slice.reducer;
 export const {
   startLoading,
   hasError,
-  getPostsSuccess,
-  getAndPushPostsSuccess,
-  getPostSuccess,
-  createPostSuccess,
-  updatePostSuccess,
-  deletePostSuccess,
+  getCommentsSuccess,
+  getAndPushCommentsSuccess,
+  getCommentSuccess,
+  createCommentSuccess,
+  updateCommentSuccess,
+  deleteCommentSuccess,
 } = slice.actions;
 
 // ----------------------------------------------------------------------
 
 // Fetch all posts
-export function getPosts(params: GetPostsParams) {
+export function getComments(params: GetCommentsParams) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await getPostsAPI(params);
-      dispatch(slice.actions.getPostsSuccess(response.data));
+      const response = await getCommentsAPI(params);
+      dispatch(slice.actions.getCommentsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
   };
 }
 
-export function getAndPutPosts(params: GetPostsParams) {
+export function getAndPutComments(params: GetCommentsParams) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await getPostsAPI(params);
-      dispatch(slice.actions.getAndPushPostsSuccess(response.data));
+      const response = await getCommentsAPI(params);
+      dispatch(slice.actions.getAndPushCommentsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
   };
 }
 
-// Fetch a single post by ID
-export function getPost(id: string) {
+// Fetch a single comment by ID
+export function getComment(id: string) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/admins/posts/${id}`);
-      dispatch(slice.actions.getPostSuccess(response.data.data));
+      dispatch(slice.actions.getCommentSuccess(response.data.data));
+      return response.data.data;
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
+      return null;
     }
   };
 }
 
-// Create a new post
-export function createPost(payload: Partial<Post>, callback?: () => void) {
-  return async () => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.post("/admins/posts", payload);
-      dispatch(slice.actions.createPostSuccess(response.data.data));
-      if (callback) {
-        callback();
-      }
-    } catch (error) {
-      dispatch(slice.actions.hasError((error as AxiosError).message));
-    }
-  };
-}
-
-// Update an existing post
-export function updatePost(
-  id: string,
-  payload: UpdatePostPayload,
+// Create a new comment
+export function createComment(
+  payload: CreateCommentPayload,
   callback?: () => void
 ) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await updatePostAPI(id, payload);
-      dispatch(slice.actions.updatePostSuccess(response));
+      const response = await createCommentAPI(payload);
+      dispatch(slice.actions.createCommentSuccess(response.data));
       if (callback) {
         callback();
       }
@@ -192,32 +184,52 @@ export function updatePost(
   };
 }
 
-// Delete a post by ID
-export function deletePost(id: string) {
+// Update an existing comment
+export function updateComment(
+  id: string,
+  payload: UpdateCommentPayload,
+  callback?: () => void
+) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      await deletePostAPI(id);
-      dispatch(slice.actions.deletePostSuccess(id));
+      const response = await updateCommentAPI(id, payload);
+      dispatch(slice.actions.updateCommentSuccess(response));
+      if (callback) {
+        callback();
+      }
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
   };
 }
 
-export function deletePosts(ids: string[]) {
+// Delete a comment by ID
+export function deleteComment(id: string) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      await deletePostsAPI(ids);
-      dispatch(slice.actions.deletePostsSuccess(ids));
+      await deleteCommentAPI(id);
+      dispatch(slice.actions.deleteCommentSuccess(id));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
   };
 }
 
-export const usePost = () => ({
+export function deleteComments(ids: string[]) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await deleteCommentsAPI(ids);
+      dispatch(slice.actions.deleteCommentsSuccess(ids));
+    } catch (error) {
+      dispatch(slice.actions.hasError((error as AxiosError).message));
+    }
+  };
+}
+
+export const useComment = () => ({
   dispatch: useDispatch(),
-  ...useSelector((state) => state.post),
+  ...useSelector((state) => state.comment),
 });

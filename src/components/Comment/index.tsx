@@ -1,29 +1,20 @@
-import { Post as PostType } from "@/@types/post";
 import { TouchableOpacity, View } from "react-native";
-import { Avatar, SizableText, Text } from "tamagui";
+import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
-import AvatarSample from "@/assets/icons/avatar.svg";
-import HeartIcon from "@/assets/icons/heart.svg";
-import HeartFillIcon from "@/assets/icons/heart-fill.svg";
-import CommentIcon from "@/assets/icons/comment.svg";
 import MenuIcon from "@/assets/icons/menu.svg";
-import useToggle from "@/hooks/useToggle";
-import CommentModal from "./CommentModal";
+import { Comment as CommentType } from "@/@types/comment";
 
-const Post = ({ ...props }: PostType) => {
-  const [commentModal, , , onClose, onOpen] = useToggle();
-  const { title, content, created_at, is_liked, user } = props;
-
+const Comment = (props: CommentType) => {
+  const { content, created_at, user } = props;
   return (
-    <View
-      className={`flex flex-col gap-2 py-3 px-4 border-b-[#f1f1ef] border-b-[1px]`}
-    >
+    <View className={`flex flex-col gap-2 py-3 px-4`}>
       <View className="flex flex-row items-center gap-2">
         <View className="w-6 h-6 bg-black rounded-full" />
-        <View className="flex flex-col flex-1">
+
+        <View className="flex flex-col flex-1 justify-start">
           <View className="flex flex-row items-center">
-            <SizableText size={"$3"}>
-              {user.first_name} {user.last_name}
+            <SizableText size={"$1"}>
+              {`${user.first_name} ${user.last_name}`}
             </SizableText>
             <TouchableOpacity className="ml-auto">
               <MenuIcon
@@ -40,11 +31,9 @@ const Post = ({ ...props }: PostType) => {
           </SizableText>
         </View>
       </View>
-      <SizableText size={"$6"}>{title}</SizableText>
+      <SizableText size={"$3"}>{content}</SizableText>
 
-      <SizableText size={"$2"}>{content}</SizableText>
-
-      <View className="flex flex-row gap-12 items-center">
+      {/* <View className="flex flex-row gap-12 items-center">
         <TouchableOpacity>
           {is_liked ? (
             <HeartFillIcon style={{ width: 20, height: 20 }} />
@@ -55,12 +44,9 @@ const Post = ({ ...props }: PostType) => {
         <TouchableOpacity onPress={onOpen}>
           <CommentIcon style={{ width: 20, height: 20 }} />
         </TouchableOpacity>
-      </View>
-      {commentModal && (
-        <CommentModal open={commentModal} onClose={onClose} post={props} />
-      )}
+      </View> */}
     </View>
   );
 };
 
-export default Post;
+export default Comment;

@@ -1,4 +1,4 @@
-import { PaginationParams } from "@/@types/pagination";
+import { PaginationParams } from "@/@types/api";
 import React, { useEffect, useState, useRef } from "react";
 import {
   ActivityIndicator,
@@ -18,6 +18,7 @@ interface PaginatedListProps<T> {
   isLoading: boolean;
   renderItem: ListRenderItem<T>;
   className?: string;
+  keyExtractor?: FlatListProps<T>["keyExtractor"];
 }
 
 const PaginatedList = <T,>(props: PaginatedListProps<T>) => {
@@ -27,7 +28,7 @@ const PaginatedList = <T,>(props: PaginatedListProps<T>) => {
   const [isFirstPageReceived, setIsFirstPageReceived] = useState(false);
 
   const handleNextPage = () => {
-    if (isLastPage) return;
+    if (isLastPage || isLoading || !isFirstPageReceived) return;
     fetchData({
       per_page,
       page: current_page + 1,
@@ -64,6 +65,7 @@ const PaginatedList = <T,>(props: PaginatedListProps<T>) => {
       renderItem={renderItem}
       onEndReached={handleNextPage}
       onEndReachedThreshold={0.8}
+      keyExtractor={props.keyExtractor}
       ListFooterComponent={ListEndLoader} // Loader when loading the next page
     />
   );

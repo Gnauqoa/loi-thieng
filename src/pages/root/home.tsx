@@ -1,14 +1,4 @@
-import { Text } from "@tamagui/core";
-import { Button, View } from "react-native";
-
-import { login } from "@/config/redux/slices/auth";
-import {
-  getAndPushPostsSuccess,
-  getAndPutPosts,
-  getPost,
-  getPosts,
-  usePost,
-} from "@/config/redux/slices/post";
+import { getAndPutPosts, usePost } from "@/config/redux/slices/post";
 import { useEffect } from "react";
 import PaginatedList from "@/components/PaginatedList";
 import Post from "@/components/Post";
@@ -16,14 +6,7 @@ import Post from "@/components/Post";
 const HomeScreen = () => {
   const { dispatch, total_items, current_page, total_pages, items, isLoading } =
     usePost();
-  useEffect(() => {
-    dispatch(
-      getAndPutPosts({
-        page: 1,
-        per_page: 10,
-      })
-    );
-  }, []);
+
   return (
     <PaginatedList
       className="bg-[#fff]"
@@ -35,7 +18,7 @@ const HomeScreen = () => {
       isLoading={isLoading}
       renderItem={({ item }) => <Post {...item} />}
       fetchData={(params) => {
-        dispatch(getPosts(params));
+        dispatch(getAndPutPosts(params));
       }}
     />
   );

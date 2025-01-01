@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type Post = {
   id: string; // Assuming `id` is present as a primary key in your table
   title: string;
@@ -9,4 +11,7 @@ export type Post = {
   updated_at: Date;
   total_comments: number;
   is_liked: boolean;
+  user: User;
+  liked: boolean;
+  total_likes: number;
 };
