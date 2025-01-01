@@ -27,8 +27,12 @@ export const defaultGetByIdParams: GetByIdParams = {
   useCache: true,
 };
 
+export type ReducerDataType<T> = T & {
+  isLoading: boolean;
+};
+
 export type PaginationMeta<T> = {
-  items: T[];
+  items: ReducerDataType<T>[];
   total_items: number;
   total_pages: number;
   current_page: number;

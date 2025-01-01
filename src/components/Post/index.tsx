@@ -1,18 +1,44 @@
+import React from "react";
 import { Post as PostType } from "@/@types/post";
-import { TouchableOpacity, View } from "react-native";
-import { Avatar, SizableText, Text } from "tamagui";
+import { Text, TouchableOpacity, View } from "react-native";
+import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
-import AvatarSample from "@/assets/icons/avatar.svg";
 import HeartIcon from "@/assets/icons/heart.svg";
 import HeartFillIcon from "@/assets/icons/heart-fill.svg";
 import CommentIcon from "@/assets/icons/comment.svg";
 import MenuIcon from "@/assets/icons/menu.svg";
 import useToggle from "@/hooks/useToggle";
 import CommentModal from "./CommentModal";
+import {
+  likePost,
+  PostReducerType,
+  unlikePost,
+  usePost,
+} from "@/config/redux/slices/post";
 
-const Post = ({ ...props }: PostType) => {
+const Post = ({ ...props }: PostReducerType) => {
   const [commentModal, , , onClose, onOpen] = useToggle();
-  const { title, content, created_at, is_liked, user } = props;
+  const {
+    title,
+    content,
+    created_at,
+    liked,
+    total_likes,
+    user,
+    total_comments,
+    isLoading,
+  } = props;
+  const { dispatch } = usePost();
+
+  const handleLike = () => {
+    if (isLoading) return;
+    dispatch(likePost(props.id));
+  };
+
+  const handleUnlike = () => {
+    if (isLoading) return;
+    dispatch(unlikePost(props.id));
+  };
 
   return (
     <View
@@ -45,16 +71,24 @@ const Post = ({ ...props }: PostType) => {
       <SizableText size={"$2"}>{content}</SizableText>
 
       <View className="flex flex-row gap-12 items-center">
-        <TouchableOpacity>
-          {is_liked ? (
-            <HeartFillIcon style={{ width: 20, height: 20 }} />
-          ) : (
-            <HeartIcon fill={"#000"} style={{ width: 20, height: 20 }} />
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onOpen}>
-          <CommentIcon style={{ width: 20, height: 20 }} />
-        </TouchableOpacity>
+        <View className="flex flex-row items-center gap-1">
+          <TouchableOpacity onPress={liked ? handleUnlike : handleLike}>
+            {liked ? (
+              <HeartFillIcon style={{ width: 20, height: 20 }} />
+            ) : (
+              <HeartIcon fill={"#000"} style={{ width: 20, height: 20 }} />
+            )}
+          </TouchableOpacity>
+          <SizableText size={"$1"}>{total_likes}</SizableText>
+        </View>
+        <View className="">
+          <View className="z-20 absolute rounded-full p-[3px] top-[-6px] right-[-6px] bg-[#f06408]">
+            <Text className="text-[8px] text-white">{total_comments}</Text>
+          </View>
+          <TouchableOpacity className="z-10" onPress={onOpen}>
+            <CommentIcon style={{ width: 20, height: 20 }} />
+          </TouchableOpacity>
+        </View>
       </View>
       {commentModal && (
         <CommentModal open={commentModal} onClose={onClose} post={props} />

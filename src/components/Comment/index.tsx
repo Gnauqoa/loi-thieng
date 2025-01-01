@@ -35,7 +35,7 @@ const Comment = (props: CommentType) => {
 
       {/* <View className="flex flex-row gap-12 items-center">
         <TouchableOpacity>
-          {is_liked ? (
+          {liked ? (
             <HeartFillIcon style={{ width: 20, height: 20 }} />
           ) : (
             <HeartIcon fill={"#000"} style={{ width: 20, height: 20 }} />

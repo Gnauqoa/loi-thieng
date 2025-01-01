@@ -67,7 +67,9 @@ export const updateCommentAPI = async (
 };
 
 // Delete a post by ID
-export const deleteCommentAPI = async (id: string): Promise<void> => {
+export const deleteCommentAPI = async (
+  id: string
+): Promise<DataResponse<Comment>> => {
   const { data } = await axios.delete(`/users/comments/${id}`);
   return data;
 };

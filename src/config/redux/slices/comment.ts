@@ -10,6 +10,7 @@ import {
   UpdateCommentPayload,
   createCommentAPI,
   CreateCommentPayload,
+  likeCommentAPI,
 } from "@/apis/comment";
 import { Comment } from "@/@types/comment";
 import { PaginationMeta, GetByIdParams } from "@/@types/api";
@@ -126,6 +127,31 @@ export const {
 // ----------------------------------------------------------------------
 
 // Fetch all posts
+
+export function likeComment(id: string) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await likeCommentAPI(id);
+      dispatch(slice.actions.updateCommentSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError((error as AxiosError).message));
+    }
+  };
+}
+
+export function unlikeComment(id: string) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await deleteCommentAPI(id);
+      dispatch(slice.actions.updateCommentSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError((error as AxiosError).message));
+    }
+  };
+}
+
 export function getComments(params: GetCommentsParams) {
   return async () => {
     dispatch(slice.actions.startLoading());

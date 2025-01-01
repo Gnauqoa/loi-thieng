@@ -10,7 +10,7 @@ export type Post = {
   created_at: Date;
   updated_at: Date;
   total_comments: number;
-  is_liked: boolean;
+  liked: boolean;
   user: User;
   liked: boolean;
   total_likes: number;

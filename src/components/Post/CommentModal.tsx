@@ -1,13 +1,15 @@
 import { Post as PostType } from "@/@types/post";
 import { TouchableOpacity, View } from "react-native";
-import { Avatar, SizableText, Text } from "tamagui";
+import { SizableText, Text } from "tamagui";
 import dayjs from "@/config/dayjs";
-import AvatarSample from "@/assets/icons/avatar.svg";
 import MenuIcon from "@/assets/icons/menu.svg";
 import Dialog from "react-native-dialog";
 import { getAndPutComments, useComment } from "@/config/redux/slices/comment";
 import PaginatedList from "../PaginatedList";
 import Comment from "../Comment";
+import HeartIcon from "@/assets/icons/heart.svg";
+import HeartFillIcon from "@/assets/icons/heart-fill.svg";
+import CommentIcon from "@/assets/icons/comment.svg";
 
 export type CommentModalProps = {
   post: PostType;
@@ -16,10 +18,10 @@ export type CommentModalProps = {
 };
 
 const CommentModalPost = (props: PostType) => {
-  const { title, user, content, created_at } = props;
+  const { title, user, content, created_at, liked, total_comments } = props;
   return (
     <View
-      className={`flex flex-col gap-2 py-3 px-4 border-b-[#f1f1ef] border-b-[1px]`}
+      className={`flex flex-col gap-2 py-3 px-4 border-b-[#f1f1ef] border-b-[1px] relative`}
     >
       <View className="flex flex-row items-center gap-2">
         <View className="w-6 h-6 bg-black rounded-full" />
