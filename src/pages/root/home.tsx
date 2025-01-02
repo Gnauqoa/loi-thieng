@@ -1,5 +1,4 @@
 import { getAndPutPosts, usePost } from "@/config/redux/slices/post";
-import { useEffect } from "react";
 import PaginatedList from "@/components/PaginatedList";
 import Post from "@/components/Post";
 
