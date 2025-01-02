@@ -1,14 +1,14 @@
-import { View, StyleSheet, Pressable, TouchableOpacity } from "react-native";
-import { PlatformPressable } from "@react-navigation/elements";
+import { View, Pressable } from "react-native";
 import { Text } from "@tamagui/core";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import HomeIcon from "@/assets/icons/home.svg";
+import { useTheme } from "@rneui/themed";
 
 function TabBar({
   state,
   descriptors,
   navigation,
 }: BottomTabBarProps): JSX.Element {
+  const { theme } = useTheme();
   return (
     <View className="flex flex-row items-center w-[100vw] py-3 overflow-hidden">
       {state.routes.map((route, index) => {
@@ -55,11 +55,19 @@ function TabBar({
                 {options.tabBarIcon
                   ? options.tabBarIcon({
                       focused: isFocused,
-                      color: isFocused ? "#673ab7" : "#222",
+                      color: isFocused
+                        ? theme.colors.primary
+                        : theme.colors.black,
                       size: 24,
                     })
                   : null}
-                <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
+                <Text
+                  style={{
+                    color: isFocused
+                      ? theme.colors.primary
+                      : theme.colors.black,
+                  }}
+                >
                   {label as string}
                 </Text>
               </Pressable>

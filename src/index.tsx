@@ -7,13 +7,16 @@ import { store } from "./config/redux/store";
 import RouterContainer from "./routers";
 
 import Toast from "react-native-toast-message";
+import ThemeProvider from "./config/theme";
 
 function App() {
   return (
     <ReduxProvider store={store}>
-      <TamaguiProvider>
-        <RouterContainer />
-      </TamaguiProvider>
+      <ThemeProvider>
+        <TamaguiProvider>
+          <RouterContainer />
+        </TamaguiProvider>
+      </ThemeProvider>
       <Toast />
     </ReduxProvider>
   );

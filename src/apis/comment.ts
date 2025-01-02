@@ -43,9 +43,8 @@ export const getCommentByIdAPI = async (
 
 // Create a new post
 export type CreateCommentPayload = {
-  title: string;
   content: string;
-  post_id: number;
+  post_id: number | string;
 };
 
 export const createCommentAPI = async (

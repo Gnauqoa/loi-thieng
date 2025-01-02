@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Post as PostType } from "@/@types/post";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SizableText } from "tamagui";
@@ -15,6 +15,7 @@ import {
   unlikePost,
   usePost,
 } from "@/config/redux/slices/post";
+import { useTheme } from "@rneui/themed";
 
 const Post = ({ ...props }: PostReducerType) => {
   const [commentModal, , , onClose, onOpen] = useToggle();
@@ -29,6 +30,7 @@ const Post = ({ ...props }: PostReducerType) => {
     isLoading,
   } = props;
   const { dispatch } = usePost();
+  const { theme } = useTheme();
 
   const handleLike = () => {
     if (isLoading) return;
@@ -76,13 +78,15 @@ const Post = ({ ...props }: PostReducerType) => {
             {liked ? (
               <HeartFillIcon style={{ width: 20, height: 20 }} />
             ) : (
-              <HeartIcon fill={"#000"} style={{ width: 20, height: 20 }} />
+              <HeartIcon style={{ width: 20, height: 20 }} />
             )}
           </TouchableOpacity>
           <SizableText size={"$1"}>{total_likes}</SizableText>
         </View>
         <View className="">
-          <View className="z-20 absolute rounded-full p-[3px] top-[-6px] right-[-6px] bg-[#f06408]">
+          <View
+            className={`z-20 absolute rounded-full p-[3px] top-[-6px] right-[-6px] bg-[#673ab7]`}
+          >
             <Text className="text-[8px] text-white">{total_comments}</Text>
           </View>
           <TouchableOpacity className="z-10" onPress={onOpen}>

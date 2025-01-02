@@ -10,7 +10,7 @@ const LoginScreen = () => {
   const { isLoading, dispatch } = useAuth();
 
   const [formData, setFormData] = useState({
-    account: "fc902ecf05e4570e091f",
+    account: "ddad120968590ed5a353",
     password: "123123123@q",
   });
   const { width } = useWindowDimensions();
@@ -34,7 +34,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex flex-col p-5 overflow-hidden w-full h-full justify-center items-center relative ">
+    <View className="flex flex-col p-5 overflow-hidden w-full h-full justify-center items-center relative ">
       <Image
         src={bg}
         style={{
@@ -68,7 +68,7 @@ const LoginScreen = () => {
           </Button>
         )}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

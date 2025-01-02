@@ -249,7 +249,7 @@ export function getComment(id: string) {
 // Create a new comment
 export function createComment(
   payload: CreateCommentPayload,
-  callback?: () => void
+  callback?: (data: Comment) => void
 ) {
   return async () => {
     dispatch(slice.actions.startLoading());
@@ -257,7 +257,7 @@ export function createComment(
       const response = await createCommentAPI(payload);
       dispatch(slice.actions.createCommentSuccess(response.data));
       if (callback) {
-        callback();
+        callback(response.data);
       }
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));

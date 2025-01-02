@@ -2,10 +2,8 @@ import { TouchableOpacity, View } from "react-native";
 import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
 import MenuIcon from "@/assets/icons/menu.svg";
-import { Comment as CommentType } from "@/@types/comment";
 import HeartIcon from "@/assets/icons/heart.svg";
 import HeartFillIcon from "@/assets/icons/heart-fill.svg";
-import CommentIcon from "@/assets/icons/comment.svg";
 import {
   CommentReducerType,
   likeComment,
@@ -13,7 +11,7 @@ import {
   useComment,
 } from "@/config/redux/slices/comment";
 
-const Comment = (props: CommentReducerType) => {
+const Comment = (props: CommentReducerType & { isHighlight: boolean }) => {
   const { isLoading, id, content, created_at, user, liked, total_likes } =
     props;
   const { dispatch } = useComment();
@@ -30,7 +28,9 @@ const Comment = (props: CommentReducerType) => {
   };
 
   return (
-    <View className={`flex flex-col gap-2 py-3 px-4`}>
+    <View
+      className={`flex flex-col gap-2 py-3 px-3 ${props.isHighlight ? "bg-[#ede7f6]" : ""}`}
+    >
       <View className="flex flex-row items-center gap-2">
         <View className="w-6 h-6 bg-black rounded-full" />
 
