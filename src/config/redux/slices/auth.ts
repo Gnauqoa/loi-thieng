@@ -112,6 +112,10 @@ export function initializeAuth() {
       if (accessToken && isValidToken(accessToken)) {
         const response = await getCurrentUser();
         user = response.data.data;
+      } else {
+        return dispatch(
+          slice.actions.initializeAuthSuccess({ isAuthenticated: false })
+        );
       }
 
       const firebaseToken =
