@@ -30,7 +30,6 @@ const Post = ({ ...props }: PostReducerType) => {
     isLoading,
   } = props;
   const { dispatch } = usePost();
-  const { theme } = useTheme();
 
   const handleLike = () => {
     if (isLoading) return;

@@ -220,7 +220,7 @@ export function getPost(id: string) {
   return async () => {
     dispatch(slice.actions.startLoadingPost(id));
     try {
-      const response = await axios.get(`/admins/posts/${id}`);
+      const response = await axios.get(`/users/posts/${id}`);
       dispatch(slice.actions.getPostSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
@@ -229,14 +229,17 @@ export function getPost(id: string) {
 }
 
 // Create a new post
-export function createPost(payload: Partial<Post>, callback?: () => void) {
+export function createPost(
+  payload: Partial<Post>,
+  callback?: (post: Post) => void
+) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post("/admins/posts", payload);
+      const response = await axios.post("/users/posts", payload);
       dispatch(slice.actions.createPostSuccess(response.data.data));
       if (callback) {
-        callback();
+        callback(response.data.data);
       }
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));

@@ -1,17 +1,9 @@
 import { Post as PostType } from "@/@types/post";
-import { TextInput, TouchableOpacity, View } from "react-native";
-import { SizableText } from "tamagui";
-import dayjs from "@/config/dayjs";
-import Entypo from "@expo/vector-icons/Entypo";
-import Feather from "@expo/vector-icons/Feather";
-import {
-  createComment,
-  getAndPutComments,
-  useComment,
-} from "@/config/redux/slices/comment";
+import { View } from "react-native";
+import { getAndPutComments, useComment } from "@/config/redux/slices/comment";
 import PaginatedList from "../PaginatedList";
 import Comment from "../Comment";
-import { Button, Overlay } from "@rneui/themed";
+import { Overlay } from "@rneui/themed";
 import { useState } from "react";
 import WriteComment from "./WriteComment";
 import CommentModalPost from "./CommentModalPost";

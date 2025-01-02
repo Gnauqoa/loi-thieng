@@ -12,6 +12,5 @@ export type Post = {
   total_comments: number;
   liked: boolean;
   user: User;
-  liked: boolean;
   total_likes: number;
 };

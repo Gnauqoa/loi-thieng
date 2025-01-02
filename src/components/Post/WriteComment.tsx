@@ -2,6 +2,7 @@ import { TextInput, View } from "react-native";
 import { createComment, useComment } from "@/config/redux/slices/comment";
 import { Button } from "@rneui/themed";
 import { useState } from "react";
+import { toastSuccess } from "@/utils/toast";
 
 const WriteComment = ({
   post_id,
@@ -15,9 +16,11 @@ const WriteComment = ({
 
   const handleCreate = () => {
     dispatch(
-      createComment({ content: comment, post_id }, (cmt) =>
-        onNewComment(cmt.id.toString())
-      )
+      createComment({ content: comment, post_id }, (cmt) => {
+        onNewComment(cmt.id.toString());
+        toastSuccess("Đăng bình luận thành công!");
+        setComment("");
+      })
     );
   };
   return (
