@@ -17,7 +17,6 @@ const Comment = (props: CommentReducerType & { isHighlight: boolean }) => {
   const { dispatch } = useComment();
 
   const handleLike = () => {
-    console.log(isLoading);
     if (isLoading) return;
     dispatch(likeComment(id));
   };

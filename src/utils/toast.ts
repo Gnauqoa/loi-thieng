@@ -20,7 +20,6 @@ const showToast = (
   options?: ToastShowParams
 ) => {
   const optsMerge = { ...TOAST_DEFAULT_OPTIONS, ...options };
-  console.log({ optsMerge });
   Toast.show({
     type,
     text1: message,

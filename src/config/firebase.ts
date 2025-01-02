@@ -25,8 +25,6 @@ const firebaseConfig = decodeFirebaseConfig(
   process.env.EXPO_PUBLIC_FIREBASE_CONFIG || ""
 );
 
-console.log("firebaseConfig", firebaseConfig);
-
 const app: FirebaseApp | null = isValidConfig
   ? getApps().length === 0
     ? initializeApp(firebaseConfig)
