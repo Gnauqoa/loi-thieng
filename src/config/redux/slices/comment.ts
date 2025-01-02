@@ -217,7 +217,9 @@ export function getAndPutComments(params: GetCommentsParams) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await getCommentsAPI(params);
-      dispatch(slice.actions.getAndPushCommentsSuccess(response.data));
+      if (params.page === 1) {
+        dispatch(slice.actions.getCommentsSuccess(response.data));
+      } else dispatch(slice.actions.getAndPushCommentsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }

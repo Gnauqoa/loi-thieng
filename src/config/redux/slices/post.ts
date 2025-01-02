@@ -206,7 +206,9 @@ export function getAndPutPosts(params: GetPostsParams) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await getPostsAPI(params);
-      dispatch(slice.actions.getAndPushPostsSuccess(response.data));
+      if (params.page === 1) {
+        dispatch(slice.actions.getPostsSuccess(response.data));
+      } else dispatch(slice.actions.getAndPushPostsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
