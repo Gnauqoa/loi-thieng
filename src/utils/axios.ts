@@ -2,12 +2,13 @@ import axios, { AxiosError } from "axios";
 import "./axios-interceptors";
 import { getToken } from "./local-storage";
 import { toastError } from "./toast";
+import { Platform } from "react-native";
 
 axios.defaults.timeout = 90000; // 90s
 // axios.defaults.baseURL =
 //   process.env.API_SERVER_URL || 'https://api.revpayment.io';
 
-axios.defaults.baseURL = "http://10.0.2.2:4000/api";
+axios.defaults.baseURL = Platform.OS === "web" ? "http://localhost:4000/api" : "http://10.0.2.2:4000/api";
 
 (async () => {
   const token = await getToken();
