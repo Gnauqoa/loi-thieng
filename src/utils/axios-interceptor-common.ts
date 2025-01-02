@@ -34,7 +34,7 @@ const interceptors = {
   error: [
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        window.location.href = "/auth/sign-in";
+        // window.location.href = "/auth/sign-in";
       }
       throw error;
     },
