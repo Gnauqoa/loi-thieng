@@ -13,86 +13,13 @@ import PaginatedList from "../PaginatedList";
 import Comment from "../Comment";
 import { Button, Overlay } from "@rneui/themed";
 import { useState } from "react";
+import WriteComment from "./WriteComment";
+import CommentModalPost from "./CommentModalPost";
 
 export type CommentModalProps = {
   post: PostType;
   open: boolean;
   onClose: () => void;
-};
-
-const CommentModalPost = (props: PostType & { onClose: () => void }) => {
-  const { title, user, content, created_at } = props;
-  return (
-    <View
-      className={`flex flex-col gap-2 py-3 px-3 border-b-[#f1f1ef] border-b-[1px] relative`}
-    >
-      <View className="flex flex-row items-center gap-2">
-        <View className="w-6 h-6 bg-black rounded-full" />
-        <View className="flex flex-col flex-1">
-          <View className="flex flex-row items-center gap-3">
-            <SizableText size={"$3"}>
-              {user.first_name} {user.last_name}
-            </SizableText>
-            <TouchableOpacity className="ml-auto">
-              <Entypo name="dots-three-horizontal" size={20} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={props.onClose}>
-              <Feather name="x" size={20} color="black" />
-            </TouchableOpacity>
-          </View>
-          <SizableText size={"$1"}>
-            {dayjs(created_at).from(dayjs())}
-          </SizableText>
-        </View>
-      </View>
-      <SizableText size={"$6"}>{title}</SizableText>
-
-      <SizableText size={"$2"}>{content}</SizableText>
-    </View>
-  );
-};
-
-const WriteComment = ({
-  post_id,
-  onNewComment,
-}: {
-  post_id: string;
-  onNewComment: (id: string) => void;
-}) => {
-  const [comment, setComment] = useState("");
-  const { dispatch } = useComment();
-
-  const handleCreate = () => {
-    dispatch(
-      createComment({ content: comment, post_id }, (cmt) =>
-        onNewComment(cmt.id.toString())
-      )
-    );
-  };
-  return (
-    <View className="flex flex-col gap-2 px-3">
-      <View className="flex flex-row gap-2">
-        <View className="w-6 h-6 bg-black rounded-full" />
-        <TextInput
-          multiline={true}
-          numberOfLines={5}
-          value={comment}
-          onChangeText={setComment}
-          className="outline-none border-[1px] p-3 h-[40px] flex-1"
-        />
-      </View>
-      <Button
-        onPress={handleCreate}
-        disabled={!comment.length}
-        buttonStyle={{
-          marginLeft: "auto",
-          borderRadius: 4,
-        }}
-        titleStyle={{ fontSize: 12 }}
-        title={"Đăng"}
-      />
-    </View>
-  );
 };
 
 const CommentModal = (props: CommentModalProps) => {
