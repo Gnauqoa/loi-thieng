@@ -1,15 +1,14 @@
 import { Post as PostType } from "@/@types/post";
-import { TouchableOpacity, View } from "react-native";
-import { SizableText, Text } from "tamagui";
+import { TextInput, TouchableOpacity, View } from "react-native";
+import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
-import MenuIcon from "@/assets/icons/menu.svg";
-import Dialog from "react-native-dialog";
+import Entypo from "@expo/vector-icons/Entypo";
+import Feather from "@expo/vector-icons/Feather";
 import { getAndPutComments, useComment } from "@/config/redux/slices/comment";
 import PaginatedList from "../PaginatedList";
 import Comment from "../Comment";
-import HeartIcon from "@/assets/icons/heart.svg";
-import HeartFillIcon from "@/assets/icons/heart-fill.svg";
-import CommentIcon from "@/assets/icons/comment.svg";
+import { Button, Overlay } from "react-native-elements";
+import { useState } from "react";
 
 export type CommentModalProps = {
   post: PostType;
@@ -17,8 +16,8 @@ export type CommentModalProps = {
   onClose: () => void;
 };
 
-const CommentModalPost = (props: PostType) => {
-  const { title, user, content, created_at, liked, total_comments } = props;
+const CommentModalPost = (props: PostType & { onClose: () => void }) => {
+  const { title, user, content, created_at } = props;
   return (
     <View
       className={`flex flex-col gap-2 py-3 px-4 border-b-[#f1f1ef] border-b-[1px] relative`}
@@ -26,18 +25,15 @@ const CommentModalPost = (props: PostType) => {
       <View className="flex flex-row items-center gap-2">
         <View className="w-6 h-6 bg-black rounded-full" />
         <View className="flex flex-col flex-1">
-          <View className="flex flex-row items-center">
+          <View className="flex flex-row items-center gap-3">
             <SizableText size={"$3"}>
               {user.first_name} {user.last_name}
             </SizableText>
             <TouchableOpacity className="ml-auto">
-              <MenuIcon
-                fill={"#000"}
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
-              />
+              <Entypo name="dots-three-horizontal" size={20} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={props.onClose}>
+              <Feather name="x" size={20} color="black" />
             </TouchableOpacity>
           </View>
           <SizableText size={"$1"}>
@@ -55,24 +51,37 @@ const CommentModalPost = (props: PostType) => {
 const CommentModal = (props: CommentModalProps) => {
   const { dispatch, items, isLoading, total_items, total_pages, current_page } =
     useComment();
+
+  const [comment, setComment] = useState("");
   return (
-    <Dialog.Container
-      contentStyle={{
-        padding: 0,
-      }}
-      headerStyle={{
-        margin: 0,
-        padding: 0,
-      }}
-      footerStyle={{
-        padding: 0,
-      }}
-      visible={props.open}
+    <Overlay
+      fullScreen={true}
+      isVisible={props.open}
       onBackdropPress={props.onClose}
     >
-      <View className="flex flex-col w-full gap-4 ">
-        <View className="flex flex-row items-center flex-1"></View>
-        <CommentModalPost {...props.post} />
+      <View className="flex flex-col w-full gap-4">
+        <CommentModalPost {...props.post} onClose={props.onClose} />
+        <View className="flex flex-col gap-2 px-3">
+          <View className="flex flex-row gap-2">
+            <View className="w-6 h-6 bg-black rounded-full" />
+            <TextInput
+              multiline={true}
+              numberOfLines={5}
+              value={comment}
+              onChangeText={setComment}
+              className="outline-none border-[1px] p-3 h-[40px] flex-1"
+            />
+          </View>
+          <Button
+            disabled={!comment.length}
+            buttonStyle={{
+              marginLeft: "auto",
+              borderRadius: 4,
+            }}
+            titleStyle={{ fontSize: 12 }}
+            title={"Đăng"}
+          />
+        </View>
       </View>
 
       <PaginatedList
@@ -88,7 +97,7 @@ const CommentModal = (props: CommentModalProps) => {
           dispatch(getAndPutComments({ ...params, post_id: props.post.id }));
         }}
       />
-    </Dialog.Container>
+    </Overlay>
   );
 };
 
