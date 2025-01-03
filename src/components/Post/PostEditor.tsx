@@ -85,15 +85,17 @@ const PostEditor = ({
         />
       </View>
       <View className="flex flex-row items-center gap-2 ml-auto">
-        <Button
-          onPress={onCancel}
-          type="clear"
-          buttonStyle={{
-            borderRadius: 4,
-          }}
-          titleStyle={{ fontSize: 12 }}
-          title={"Huỷ"}
-        />
+        {editMode && (
+          <Button
+            onPress={onCancel}
+            type="clear"
+            buttonStyle={{
+              borderRadius: 4,
+            }}
+            titleStyle={{ fontSize: 12 }}
+            title={"Huỷ"}
+          />
+        )}
         <Button
           onPress={handleCreate}
           disabled={!comment.length || !title.length}

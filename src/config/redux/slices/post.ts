@@ -268,12 +268,13 @@ export function updatePost(
 }
 
 // Delete a post by ID
-export function deletePost(id: string) {
+export function deletePost(id: string, callback?: () => void) {
   return async () => {
     dispatch(slice.actions.startLoadingPost(id));
     try {
       await deletePostAPI(id);
       dispatch(slice.actions.deletePostSuccess(id));
+      if (callback) callback();
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }

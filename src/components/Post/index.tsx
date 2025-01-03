@@ -8,6 +8,7 @@ import CommentIcon from "@/assets/icons/comment.svg";
 import useToggle from "@/hooks/useToggle";
 import CommentModal from "./CommentModal";
 import {
+  deletePost,
   likePost,
   PostReducerType,
   unlikePost,
@@ -18,6 +19,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { useAuth } from "@/config/redux/slices/auth";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import PostEditor from "./PostEditor";
+import { toastSuccess } from "@/utils/toast";
 
 const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
   const [commentModal, , , onClose, onOpen] = useToggle();
@@ -93,6 +95,14 @@ const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
                           title={"Chỉnh sửa"}
                         ></Button>
                         <Button
+                          onPress={() => {
+                            dispatch(
+                              deletePost(props.id, () => {
+                                toastSuccess("Xoá bài viết thành công!");
+                                onCloseTooltip();
+                              })
+                            );
+                          }}
                           icon={
                             <EvilIcons name="trash" size={20} color="red" />
                           }

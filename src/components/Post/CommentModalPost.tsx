@@ -10,12 +10,15 @@ import { Avatar, Button, Tooltip } from "@rneui/themed";
 import useToggle from "@/hooks/useToggle";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import PostEditor from "./PostEditor";
+import { deletePost, deletePosts, usePost } from "@/config/redux/slices/post";
+import { toastSuccess } from "@/utils/toast";
 
 const CommentModalPost = (props: PostType & { onClose: () => void }) => {
   const { title, user, content, created_at } = props;
   const [tooltip, , , onCloseTooltip, onOpenTooltip] = useToggle();
   const [editMode, , , onCloseEditMode, onOpenEditMode] = useToggle();
   const { user: currentUser } = useAuth();
+  const { dispatch } = usePost();
   return (
     <View
       className={`flex flex-col gap-2 py-3 px-3 border-b-[#f1f1ef] border-b-[1px] relative`}
@@ -61,6 +64,14 @@ const CommentModalPost = (props: PostType & { onClose: () => void }) => {
                             title={"Chỉnh sửa"}
                           ></Button>
                           <Button
+                            onPress={() => {
+                              dispatch(
+                                deletePost(props.id, () => {
+                                  toastSuccess("Xoá bài viết thành công!");
+                                  onCloseTooltip();
+                                })
+                              );
+                            }}
                             icon={
                               <EvilIcons name="trash" size={20} color="red" />
                             }
