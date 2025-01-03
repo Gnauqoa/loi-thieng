@@ -11,7 +11,7 @@ import DatePicker from "react-native-date-picker";
 import { Avatar, Badge, Button } from "@rneui/themed";
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 import { updateProfile, useAuth } from "@/config/redux/slices/auth";
-import { changePasswordAPI, getUploadAvatarSignature } from "@/apis/auth";
+import { getUploadAvatarSignature } from "@/apis/auth";
 import { toastError, toastSuccess } from "@/utils/toast";
 import Entypo from "@expo/vector-icons/Entypo";
 
@@ -21,96 +21,6 @@ type UserForm = {
   phone: string;
   birth: Date | null;
   avatar_url: string | null;
-};
-
-interface EditPasswordPayload {
-  current_password: string;
-  new_password: string;
-  new_password_confirmation: string;
-}
-
-const EditPassword = () => {
-  const [formData, setFormData] = useState<EditPasswordPayload>({
-    current_password: "",
-    new_password: "",
-    new_password_confirmation: "",
-  });
-
-  const handleInputChange = (key: keyof EditPasswordPayload, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleSubmit = async () => {
-    const { current_password, new_password, new_password_confirmation } =
-      formData;
-
-    if (!current_password || !new_password || !new_password_confirmation) {
-      toastError("Lỗ, vui lòng nhập đầy đủ thông tin!");
-      return;
-    }
-
-    if (new_password !== new_password_confirmation) {
-      toastError("Lỗi, mật khẩu mới và xác nhận mật khẩu không khớp!");
-      return;
-    }
-    if (new_password === current_password) {
-      toastError("Lỗi, mật khẩu mới không được trùng với mật khẩu cũ!");
-      return;
-    }
-    try {
-      await changePasswordAPI(formData);
-      toastSuccess("Cập nhật mật khẩu thành công");
-      setFormData({
-        current_password: "",
-        new_password: "",
-        new_password_confirmation: "",
-      });
-    } catch (error) {
-      console.error(error);
-      toastError(`Lỗi: ${(error as any).response.data.error.message}`);
-    }
-  };
-
-  return (
-    <View className="flex flex-col gap-3">
-      <Text className="text-sm">Mật khẩu hiện tại</Text>
-      <TextInput
-        value={formData.current_password}
-        onChangeText={(text) => handleInputChange("current_password", text)}
-        placeholder="Nhập mật khẩu hiện tại"
-        placeholderTextColor={"#e9e9e9"}
-        secureTextEntry
-        className="border border-gray-300 rounded-md px-3 py-2"
-      />
-      <Text className="text-sm">Mật khẩu mới</Text>
-      <TextInput
-        value={formData.new_password}
-        onChangeText={(text) => handleInputChange("new_password", text)}
-        placeholder="Nhập mật khẩu mới"
-        placeholderTextColor={"#e9e9e9"}
-        secureTextEntry
-        className="border border-gray-300 rounded-md px-3 py-2"
-      />
-      <Text className="text-sm">Xác nhận mật khẩu mới</Text>
-      <TextInput
-        value={formData.new_password_confirmation}
-        onChangeText={(text) =>
-          handleInputChange("new_password_confirmation", text)
-        }
-        placeholder="Xác nhận mật khẩu mới"
-        placeholderTextColor={"#e9e9e9"}
-        secureTextEntry
-        className="border border-gray-300 rounded-md px-3 py-2"
-      />
-
-      <Button
-        containerStyle={{ marginLeft: "auto", borderRadius: 8 }}
-        titleStyle={{ fontSize: 12 }}
-        title="Cập nhật mật khẩu"
-        onPress={handleSubmit}
-      />
-    </View>
-  );
 };
 
 const ProfileScreen = () => {
@@ -266,6 +176,7 @@ const ProfileScreen = () => {
   return (
     <View className="flex-1 bg-white p-4 gap-3">
       {/* Avatar */}
+
       <TouchableOpacity
         onPress={handleAvatarSelection}
         className="items-center"
@@ -289,6 +200,8 @@ const ProfileScreen = () => {
           </View>
         )}
       </TouchableOpacity>
+
+
       <View className="flex flex-row gap-2">
         <View className="flex flex-col gap-1 flex-1">
           <Text className="text-sm">Họ</Text>
@@ -296,7 +209,6 @@ const ProfileScreen = () => {
             value={formData.first_name}
             onChangeText={(text) => handleInputChange("first_name", text)}
             placeholder="Enter your first name"
-            placeholderTextColor={"#e9e9e9"}
             className="border border-gray-300 rounded-md px-3 py-2"
           />
         </View>
@@ -307,21 +219,21 @@ const ProfileScreen = () => {
             value={formData.last_name}
             onChangeText={(text) => handleInputChange("last_name", text)}
             placeholder="Enter your last name"
-            placeholderTextColor={"#e9e9e9"}
             className="border border-gray-300 rounded-md px-3 py-2"
           />
         </View>
       </View>
+
       {/* Phone */}
       <Text className="text-sm">Số điện thoại</Text>
       <TextInput
         value={formData.phone}
         onChangeText={(text) => handleInputChange("phone", text)}
         placeholder="Enter your phone number"
-        placeholderTextColor={"#e9e9e9"}
         keyboardType="phone-pad"
         className="border border-gray-300 rounded-md px-3 py-2"
       />
+
       {/* Birth */}
       <Text className="text-sm">Ngày sinh</Text>
       <TouchableOpacity
@@ -349,11 +261,10 @@ const ProfileScreen = () => {
         <Button
           onPress={handleSave}
           containerStyle={{ marginLeft: "auto", borderRadius: 8 }}
-          titleStyle={{ fontSize: 12 }}
+          titleStyle={{ fontSize: 16 }}
           title="Lưu"
         />
       </View>
-      <EditPassword />{" "}
     </View>
   );
 };

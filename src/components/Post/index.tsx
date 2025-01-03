@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
 import HeartIcon from "@/assets/icons/heart.svg";
@@ -96,11 +96,30 @@ const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
                         ></Button>
                         <Button
                           onPress={() => {
-                            dispatch(
-                              deletePost(props.id, () => {
-                                toastSuccess("Xoá bài viết thành công!");
-                                onCloseTooltip();
-                              })
+                            Alert.alert(
+                              "Xác nhận xoá",
+                              "Bạn có chắc chắn muốn xoá bài viết này không?",
+                              [
+                                {
+                                  text: "Hủy",
+                                  style: "cancel",
+                                  onPress: () => console.log("Delete canceled"),
+                                },
+                                {
+                                  text: "Xoá",
+                                  style: "destructive",
+                                  onPress: () => {
+                                    dispatch(
+                                      deletePost(props.id, () => {
+                                        toastSuccess(
+                                          "Xoá bài viết thành công!"
+                                        );
+                                        onCloseTooltip();
+                                      })
+                                    );
+                                  },
+                                },
+                              ]
                             );
                           }}
                           icon={

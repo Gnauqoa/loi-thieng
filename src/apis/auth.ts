@@ -25,5 +25,11 @@ export const updateProfileAPI = (
 ): Promise<AxiosResponse<DataResponse<AuthUser>>> =>
   axios.put("/users/users/current", payload);
 
-export const changePassword = (payload: object): Promise<AxiosResponse> =>
+export type EditPasswordPayload = {
+  current_password: string;
+  new_password: string;
+  new_password_confirmation: string;
+}
+
+export const changePasswordAPI = (payload: EditPasswordPayload): Promise<AxiosResponse> =>
   axios.put("/users/users/current/password", payload);
