@@ -123,7 +123,11 @@ const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
         </View>
       </View>
       {editMode ? (
-        <PostEditor post={props} onCancel={onCloseEditMode} />
+        <PostEditor
+          onUpdatePost={onCloseEditMode}
+          post={props}
+          onCancel={onCloseEditMode}
+        />
       ) : (
         <>
           <SizableText size={"$6"}>{title}</SizableText>

@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  createPost,
-  updatePost,
-  usePost,
-} from "@/config/redux/slices/post";
+import { createPost, updatePost, usePost } from "@/config/redux/slices/post";
 import { TextInput, View } from "react-native";
 import { useEffect, useState } from "react";
 import { Avatar, Button, Text } from "@rneui/themed";
@@ -15,9 +11,11 @@ const PostEditor = ({
   post,
   onNewPost,
   onCancel,
+  onUpdatePost,
 }: {
   post?: PostType;
   onNewPost?: (id: string) => void;
+  onUpdatePost?: (id: string) => void;
   onCancel?: () => void;
 }) => {
   const [comment, setComment] = useState("");
@@ -25,6 +23,7 @@ const PostEditor = ({
   const { dispatch } = usePost();
   const { user } = useAuth();
   const editMode = !!post;
+
   useEffect(() => {
     setTitle(post?.title || "");
     setComment(post?.content || "");
@@ -38,7 +37,13 @@ const PostEditor = ({
   const handleCreate = () => {
     dispatch(
       editMode
-        ? updatePost(post.id, { title, content: comment })
+        ? updatePost(post.id, { title, content: comment }, (post) => {
+            if (onUpdatePost) {
+              onUpdatePost(post.id.toString());
+            }
+            handleReset();
+            toastSuccess("Cập nhật bài viết thành công!");
+          })
         : createPost({ content: comment, title, category_id: 1 }, (post) => {
             if (onNewPost) onNewPost(post.id.toString());
             handleReset();
@@ -61,7 +66,7 @@ const PostEditor = ({
           </>
         )}
       </View>
-      <View className="flex flex-col  ml-8 gap-2 flex-1">
+      <View className="flex flex-col  ml-8 gap-2">
         <TextInput
           value={title}
           onChangeText={setTitle}
@@ -74,7 +79,7 @@ const PostEditor = ({
           numberOfLines={5}
           value={comment}
           onChangeText={setComment}
-          className="outline-none border-[1px] p-3 h-[80px] flex-1 rounded-[8px]"
+          className="outline-none border-[1px] p-3 h-[80px] rounded-[8px]"
           placeholder="Nội dung"
           placeholderTextColor={"#e9e9e9"}
         />

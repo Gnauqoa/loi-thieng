@@ -251,7 +251,7 @@ export function createPost(
 export function updatePost(
   id: string,
   payload: UpdatePostPayload,
-  callback?: () => void
+  callback?: (post: Post) => void
 ) {
   return async () => {
     dispatch(slice.actions.startLoadingPost(id));
@@ -259,7 +259,7 @@ export function updatePost(
       const response = await updatePostAPI(id, payload);
       dispatch(slice.actions.updatePostSuccess(response.data));
       if (callback) {
-        callback();
+        callback(response.data);
       }
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));

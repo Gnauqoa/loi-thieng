@@ -1,3 +1,4 @@
+import React from "react";
 import { Post as PostType } from "@/@types/post";
 import { TouchableOpacity, View } from "react-native";
 import { SizableText } from "tamagui";
@@ -7,10 +8,13 @@ import Feather from "@expo/vector-icons/Feather";
 import { useAuth } from "@/config/redux/slices/auth";
 import { Avatar, Button, Tooltip } from "@rneui/themed";
 import useToggle from "@/hooks/useToggle";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
+import PostEditor from "./PostEditor";
 
 const CommentModalPost = (props: PostType & { onClose: () => void }) => {
   const { title, user, content, created_at } = props;
-  const [open, , , onClose, onOpen] = useToggle();
+  const [tooltip, , , onCloseTooltip, onOpenTooltip] = useToggle();
+  const [editMode, , , onCloseEditMode, onOpenEditMode] = useToggle();
   const { user: currentUser } = useAuth();
   return (
     <View
@@ -31,25 +35,54 @@ const CommentModalPost = (props: PostType & { onClose: () => void }) => {
             <View className="flex flex-row items-center ml-auto gap-3">
               {currentUser?.role === "admin" ||
                 (currentUser?.id === user.id && (
-                  <Tooltip
-                    width={200}
-                    visible={open}
-                    onClose={onClose}
-                    onOpen={onOpen}
-                    popover={
-                      <View className="flex flex-col">
-                        <Button>Chỉnh sửa</Button> <Button>Xoá</Button>
-                      </View>
-                    }
-                  >
-                    <TouchableOpacity className="ml-auto">
+                  <View className="ml-auto">
+                    <Tooltip
+                      visible={tooltip}
+                      onOpen={onOpenTooltip}
+                      onClose={onCloseTooltip}
+                      width={120}
+                      height={60}
+                      backgroundColor={"transparent"}
+                      popover={
+                        <View className="flex flex-col gap-2 py-1 shadow-xl rounded-[8px] bg-[#fff]">
+                          <Button
+                            icon={<Entypo name="edit" size={12} />}
+                            iconPosition="left"
+                            type="clear"
+                            titleStyle={{
+                              marginLeft: 4,
+                              fontSize: 12,
+                              color: "black",
+                            }}
+                            onPress={() => {
+                              onOpenEditMode();
+                              onCloseTooltip();
+                            }}
+                            title={"Chỉnh sửa"}
+                          ></Button>
+                          <Button
+                            icon={
+                              <EvilIcons name="trash" size={20} color="red" />
+                            }
+                            iconPosition="left"
+                            type="clear"
+                            titleStyle={{
+                              color: "red",
+                              marginLeft: 4,
+                              fontSize: 12,
+                            }}
+                            title={"Xoá"}
+                          ></Button>
+                        </View>
+                      }
+                    >
                       <Entypo
                         name="dots-three-horizontal"
                         size={20}
                         color="black"
                       />
-                    </TouchableOpacity>
-                  </Tooltip>
+                    </Tooltip>
+                  </View>
                 ))}
               <TouchableOpacity onPress={props.onClose}>
                 <Feather name="x" size={20} color="black" />
@@ -61,9 +94,18 @@ const CommentModalPost = (props: PostType & { onClose: () => void }) => {
           </SizableText>
         </View>
       </View>
-      <SizableText size={"$6"}>{title}</SizableText>
-
-      <SizableText size={"$2"}>{content}</SizableText>
+      {editMode ? (
+        <PostEditor
+          post={props}
+          onCancel={onCloseEditMode}
+          onUpdatePost={onCloseEditMode}
+        />
+      ) : (
+        <>
+          <SizableText size={"$6"}>{title}</SizableText>
+          <SizableText size={"$2"}>{content}</SizableText>
+        </>
+      )}
     </View>
   );
 };
