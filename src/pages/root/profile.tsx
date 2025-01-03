@@ -10,10 +10,11 @@ import {
 import DatePicker from "react-native-date-picker";
 import { Avatar, Badge, Button } from "@rneui/themed";
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
-import { updateProfile, useAuth } from "@/config/redux/slices/auth";
+import { logout, updateProfile, useAuth } from "@/config/redux/slices/auth";
 import { changePasswordAPI, getUploadAvatarSignature } from "@/apis/auth";
 import { toastError, toastSuccess } from "@/utils/toast";
 import Entypo from "@expo/vector-icons/Entypo";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type UserForm = {
   first_name: string;
@@ -45,7 +46,7 @@ const EditPassword = () => {
       formData;
 
     if (!current_password || !new_password || !new_password_confirmation) {
-      toastError("Lỗ, vui lòng nhập đầy đủ thông tin!");
+      toastError("Lỗi, vui lòng nhập đầy đủ thông tin!");
       return;
     }
 
@@ -265,7 +266,6 @@ const ProfileScreen = () => {
 
   return (
     <View className="flex-1 bg-white p-4 gap-3">
-      {/* Avatar */}
       <TouchableOpacity
         onPress={handleAvatarSelection}
         className="items-center"
@@ -353,7 +353,29 @@ const ProfileScreen = () => {
           title="Lưu"
         />
       </View>
-      <EditPassword />{" "}
+      <EditPassword />
+      <Button
+        icon={<MaterialIcons name="logout" size={16} color="red" />}
+        iconPosition="left"
+        title={"Đăng xuất"}
+        type="outline"
+        buttonStyle={{ borderColor: "red" }}
+        titleStyle={{ fontSize: 12, color: "red", marginLeft: 8 }}
+        onPress={() =>
+          Alert.alert("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?", [
+            {
+              text: "Hủy",
+              style: "cancel",
+            },
+            {
+              text: "Đăng xuất",
+              onPress: () => {
+                dispatch(logout());
+              },
+            },
+          ])
+        }
+      ></Button>
     </View>
   );
 };

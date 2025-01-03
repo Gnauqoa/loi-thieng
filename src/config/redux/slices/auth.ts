@@ -4,7 +4,7 @@ import { dispatch, useDispatch, useSelector } from "../store";
 import { isValidToken, setSession } from "@/utils/jwt";
 import { getCurrentUser, signIn, updateProfileAPI } from "@/apis/auth";
 import { AuthState, AuthUser, FirebaseUser } from "@/@types/auth";
-import { toastSuccess } from "@/utils/toast";
+import { toastError, toastSuccess } from "@/utils/toast";
 import {
   getFirebaseToken,
   getToken,
@@ -166,6 +166,7 @@ export function login(credentials: { account: string; password: string }) {
       dispatch(slice.actions.loginSuccess({ user, firebaseUser }));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
+      toastError(`Lỗi: ${(error as any).response.data.error.message}`);
     }
   };
 }

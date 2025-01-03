@@ -8,7 +8,11 @@ axios.defaults.timeout = 90000; // 90s
 // axios.defaults.baseURL =
 //   process.env.API_SERVER_URL || 'https://api.revpayment.io';
 
-axios.defaults.baseURL = Platform.OS === "web" ? "http://localhost:4000/api" : "http://10.0.2.2:4000/api";
+// axios.defaults.baseURL = Platform.OS === "web" ? "http://localhost:4000/api" : "http://10.0.2.2:4000/api";
+axios.defaults.baseURL =
+  Platform.OS === "web"
+    ? "https://loi-thieng-be-35a53d3650c4.herokuapp.com/api"
+    : "https://loi-thieng-be-35a53d3650c4.herokuapp.com/api";
 
 (async () => {
   const token = await getToken();
