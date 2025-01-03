@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="love">
-  <path
-    d="M11.013 1024.862c-4.142 0-7.5 2.66-7.5 7.5s7 9.5 13 14.5c6-5 13.031-9.6 13.031-14.5 0-4.899-3.358-7.5-7.5-7.5-2.184 0-4.16 1.51-5.53 3-1.37-1.48-3.325-3-5.5-3z"
-    style="fill:none;stroke:#000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-    transform="translate(0 -1020.362)"></path>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" id="love" viewBox="0 0 32 32"><path d="M11.013 1024.862c-4.142 0-7.5 2.66-7.5 7.5s7 9.5 13 14.5c6-5 13.031-9.6 13.031-14.5 0-4.899-3.358-7.5-7.5-7.5-2.184 0-4.16 1.51-5.53 3-1.37-1.48-3.325-3-5.5-3z" style="fill:none;stroke:#000;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" transform="translate(0 -1020.362)"/></svg>
