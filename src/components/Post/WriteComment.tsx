@@ -1,8 +1,9 @@
 import { TextInput, View } from "react-native";
 import { createComment, useComment } from "@/config/redux/slices/comment";
-import { Button } from "@rneui/themed";
+import { Avatar, Button } from "@rneui/themed";
 import { useState } from "react";
 import { toastSuccess } from "@/utils/toast";
+import { useAuth } from "@/config/redux/slices/auth";
 
 const WriteComment = ({
   post_id,
@@ -13,6 +14,7 @@ const WriteComment = ({
 }) => {
   const [comment, setComment] = useState("");
   const { dispatch } = useComment();
+  const { user } = useAuth();
 
   const handleCreate = () => {
     dispatch(
@@ -26,7 +28,12 @@ const WriteComment = ({
   return (
     <View className="flex flex-col gap-2 px-3">
       <View className="flex flex-row gap-2">
-        <View className="w-6 h-6 bg-black rounded-full" />
+        <Avatar
+          rounded
+          source={{ uri: user?.avatar_url || "" }}
+          size="small"
+          containerStyle={{ borderWidth: 1 }}
+        />
         <TextInput
           multiline={true}
           numberOfLines={5}

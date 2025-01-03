@@ -1,11 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
 import HeartIcon from "@/assets/icons/heart.svg";
 import HeartFillIcon from "@/assets/icons/heart-fill.svg";
 import CommentIcon from "@/assets/icons/comment.svg";
-import MenuIcon from "@/assets/icons/menu.svg";
 import useToggle from "@/hooks/useToggle";
 import CommentModal from "./CommentModal";
 import {
@@ -14,10 +13,16 @@ import {
   unlikePost,
   usePost,
 } from "@/config/redux/slices/post";
-import { Avatar } from "@rneui/themed";
+import { Avatar, Button, Tooltip, TooltipProps } from "@rneui/themed";
+import Entypo from "@expo/vector-icons/Entypo";
+import { useAuth } from "@/config/redux/slices/auth";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
+import PostEditor from "./PostEditor";
 
 const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
   const [commentModal, , , onClose, onOpen] = useToggle();
+  const [tooltip, , , onCloseTooltip, onOpenTooltip] = useToggle();
+  const [editMode, , , onCloseEditMode, onOpenEditMode] = useToggle();
   const {
     title,
     content,
@@ -28,6 +33,7 @@ const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
     total_comments,
     isLoading,
   } = props;
+  const { user: currentUser } = useAuth();
   const { dispatch } = usePost();
 
   const handleLike = () => {
@@ -59,24 +65,71 @@ const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
             <SizableText size={"$3"}>
               {user.first_name} {user.last_name}
             </SizableText>
-            <TouchableOpacity className="ml-auto">
-              <MenuIcon
-                fill={"#000"}
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
-              />
-            </TouchableOpacity>
+            {currentUser?.role === "admin" ||
+              (currentUser?.id === user.id && (
+                <View className="ml-auto">
+                  <Tooltip
+                    visible={tooltip}
+                    onOpen={onOpenTooltip}
+                    onClose={onCloseTooltip}
+                    width={120}
+                    height={60}
+                    backgroundColor={"transparent"}
+                    popover={
+                      <View className="flex flex-col gap-2 py-1 shadow-xl rounded-[8px] bg-[#fff]">
+                        <Button
+                          icon={<Entypo name="edit" size={12} />}
+                          iconPosition="left"
+                          type="clear"
+                          titleStyle={{
+                            marginLeft: 4,
+                            fontSize: 12,
+                            color: "black",
+                          }}
+                          onPress={() => {
+                            onOpenEditMode();
+                            onCloseTooltip();
+                          }}
+                          title={"Chỉnh sửa"}
+                        ></Button>
+                        <Button
+                          icon={
+                            <EvilIcons name="trash" size={20} color="red" />
+                          }
+                          iconPosition="left"
+                          type="clear"
+                          titleStyle={{
+                            color: "red",
+                            marginLeft: 4,
+                            fontSize: 12,
+                          }}
+                          title={"Xoá"}
+                        ></Button>
+                      </View>
+                    }
+                  >
+                    <Entypo
+                      name="dots-three-horizontal"
+                      size={20}
+                      color="black"
+                    />
+                  </Tooltip>
+                </View>
+              ))}
           </View>
           <SizableText size={"$1"}>
             {dayjs(created_at).from(dayjs())}
           </SizableText>
         </View>
       </View>
-      <SizableText size={"$6"}>{title}</SizableText>
-
-      <SizableText size={"$2"}>{content}</SizableText>
+      {editMode ? (
+        <PostEditor post={props} onCancel={onCloseEditMode} />
+      ) : (
+        <>
+          <SizableText size={"$6"}>{title}</SizableText>
+          <SizableText size={"$2"}>{content}</SizableText>
+        </>
+      )}
 
       <View className="flex flex-row gap-12 items-center">
         <View className="flex flex-row items-center gap-1">

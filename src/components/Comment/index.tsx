@@ -10,6 +10,7 @@ import {
   unlikeComment,
   useComment,
 } from "@/config/redux/slices/comment";
+import { Avatar } from "@rneui/themed";
 
 const Comment = (props: CommentReducerType & { isHighlight: boolean }) => {
   const { isLoading, id, content, created_at, user, liked, total_likes } =
@@ -28,11 +29,17 @@ const Comment = (props: CommentReducerType & { isHighlight: boolean }) => {
 
   return (
     <View
-      className={`flex flex-col gap-2 py-3 px-3 ${props.isHighlight ? "bg-[#ede7f6]" : ""}`}
+      className={`flex flex-col gap-2 py-3 px-3 ${
+        props.isHighlight ? "bg-[#ede7f6]" : ""
+      }`}
     >
       <View className="flex flex-row items-center gap-2">
-        <View className="w-6 h-6 bg-black rounded-full" />
-
+        <Avatar
+          rounded
+          source={{ uri: props.user.avatar_url || "" }}
+          size="small"
+          containerStyle={{ borderWidth: 1 }}
+        />
         <View className="flex flex-col flex-1 justify-start">
           <View className="flex flex-row items-center">
             <SizableText size={"$1"}>

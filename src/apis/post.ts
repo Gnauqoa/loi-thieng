@@ -23,7 +23,9 @@ export const likePostAPI = async (id: string): Promise<DataResponse<Post>> => {
   return data;
 };
 
-export const unlikePostAPI = async (id: string): Promise<DataResponse<Post>> => {
+export const unlikePostAPI = async (
+  id: string
+): Promise<DataResponse<Post>> => {
   const { data } = await axios.delete(`/users/posts/${id}/like`);
   return data;
 };
@@ -53,7 +55,10 @@ export const createPostAPI = async (
 };
 
 // Update an existing post by ID
-export type UpdatePostPayload = Partial<CreatePostPayload>;
+export type UpdatePostPayload = {
+  title: string;
+  content: string;
+};
 
 export const updatePostAPI = async (
   id: string,

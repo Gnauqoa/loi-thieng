@@ -5,7 +5,6 @@ import TamaguiProvider from "./config/tamagui.config";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./config/redux/store";
 import RouterContainer from "./routers";
-
 import Toast from "react-native-toast-message";
 import ThemeProvider from "./config/theme";
 

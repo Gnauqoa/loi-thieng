@@ -257,7 +257,7 @@ export function updatePost(
     dispatch(slice.actions.startLoadingPost(id));
     try {
       const response = await updatePostAPI(id, payload);
-      dispatch(slice.actions.updatePostSuccess(response));
+      dispatch(slice.actions.updatePostSuccess(response.data));
       if (callback) {
         callback();
       }
