@@ -158,7 +158,6 @@ const ProfileScreen = () => {
       }
 
       // Save other form data
-      console.log("formData", formData);
       dispatch(
         updateProfile({
           ...formData,
@@ -192,7 +191,7 @@ const ProfileScreen = () => {
             />
             <Badge
               value={<Entypo name="edit" size={8} color="white" />}
-              containerStyle={{ position: "absolute", bottom: 5, left: 40 }}
+              containerStyle={{ position: "absolute", bottom: 5, right:0 }}
             />
           </View>
         ) : (
