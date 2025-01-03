@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { Post as PostType } from "@/@types/post";
-import { Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SizableText } from "tamagui";
 import dayjs from "@/config/dayjs";
 import HeartIcon from "@/assets/icons/heart.svg";
@@ -15,9 +14,9 @@ import {
   unlikePost,
   usePost,
 } from "@/config/redux/slices/post";
-import { useTheme } from "@rneui/themed";
+import { Avatar } from "@rneui/themed";
 
-const Post = ({ ...props }: PostReducerType) => {
+const Post = ({ ...props }: PostReducerType & { isHighlight: boolean }) => {
   const [commentModal, , , onClose, onOpen] = useToggle();
   const {
     title,
@@ -43,10 +42,18 @@ const Post = ({ ...props }: PostReducerType) => {
 
   return (
     <View
-      className={`flex flex-col gap-2 py-3 px-4 border-b-[#f1f1ef] border-b-[1px]`}
+      className={`flex flex-col gap-2 py-3 px-4 border-b-[#f1f1ef] border-b-[1px] ${
+        props.isHighlight ? "bg-[#ede7f6]" : ""
+      }`}
     >
       <View className="flex flex-row items-center gap-2">
-        <View className="w-6 h-6 bg-black rounded-full" />
+        <Avatar
+          rounded
+          source={{ uri: props.user.avatar_url || "" }}
+          size="small"
+          containerStyle={{ borderWidth: 1 }}
+        />
+
         <View className="flex flex-col flex-1">
           <View className="flex flex-row items-center">
             <SizableText size={"$3"}>

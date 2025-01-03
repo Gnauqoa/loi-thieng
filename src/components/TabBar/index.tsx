@@ -58,7 +58,7 @@ function TabBar({
                       color: isFocused
                         ? theme.colors.primary
                         : theme.colors.black,
-                      size: 24,
+                      size: 20,
                     })
                   : null}
                 <Text

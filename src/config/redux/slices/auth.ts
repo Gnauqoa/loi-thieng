@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { dispatch, useDispatch, useSelector } from "../store";
 import { isValidToken, setSession } from "@/utils/jwt";
-import { getCurrentUser, signIn } from "@/apis/auth";
+import { getCurrentUser, signIn, updateProfileAPI } from "@/apis/auth";
 import { AuthState, AuthUser, FirebaseUser } from "@/@types/auth";
 import { toastSuccess } from "@/utils/toast";
 import {
@@ -95,6 +95,7 @@ export function initializeAuth() {
     if (auth)
       onAuthStateChanged(auth, async (firebaseUser) => {
         if (firebaseUser) {
+          console.log("Firebase user", firebaseUser);
           dispatch(
             slice.actions.initializeAuthSuccess({
               isAuthenticated: true,
@@ -103,11 +104,10 @@ export function initializeAuth() {
           );
         }
       });
-
+    let user: AuthUser | null = null;
+    let firebaseUser: FirebaseUser | null = null;
     try {
       const accessToken = typeof window !== "undefined" ? await getToken() : "";
-      let user: AuthUser | null = null;
-      let firebaseUser: FirebaseUser | null = null;
 
       if (accessToken && isValidToken(accessToken)) {
         const response = await getCurrentUser();
@@ -122,7 +122,7 @@ export function initializeAuth() {
         typeof window !== "undefined" ? await getFirebaseToken() : "";
 
       if (firebaseToken) {
-        firebaseUser = (await signInFirebaseWithToken(firebaseToken)).user;
+        signInFirebaseWithToken(firebaseToken);
       }
 
       dispatch(
@@ -133,6 +133,16 @@ export function initializeAuth() {
         })
       );
     } catch (error) {
+      if (user) {
+        dispatch(
+          slice.actions.initializeAuthSuccess({
+            isAuthenticated: true,
+            user,
+            firebaseUser,
+          })
+        );
+      }
+
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }
   };
@@ -188,6 +198,27 @@ export function register(credentials: {
       const response = await axios.post("/api/account/register", credentials);
       const { user } = response.data;
       dispatch(slice.actions.registerSuccess({ user }));
+    } catch (error) {
+      dispatch(slice.actions.hasError((error as AxiosError).message));
+    }
+  };
+}
+
+export type UpdateUserPayload = {
+  first_name?: string;
+  last_name?: string;
+  avatar_url?: string;
+  phone?: string;
+  birth?: Date;
+};
+
+export function updateProfile(payload: UpdateUserPayload) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await updateProfileAPI(payload);
+      const user = response.data.data;
+      dispatch(slice.actions.loginSuccess({ user }));
     } catch (error) {
       dispatch(slice.actions.hasError((error as AxiosError).message));
     }

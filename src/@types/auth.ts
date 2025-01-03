@@ -13,7 +13,21 @@ export type ActionMap<M extends { [index: string]: any }> = {
       };
 };
 
-export type AuthUser = null | Record<string, any>;
+export type AuthUser = null | {
+  id: number;
+  birth: string;
+  first_name: string;
+  last_name: string;
+  role: string;
+  status: string;
+  email: string;
+  username: string;
+  phone: string;
+  avatar_url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type FirebaseUser = _FirebaseUser;
 
 export type AuthState = {

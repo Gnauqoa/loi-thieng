@@ -1,7 +1,6 @@
 // In App.js in a new project
 
 import * as React from "react";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "@/pages/root/home";
@@ -9,10 +8,12 @@ import { initializeAuth, useAuth } from "@/config/redux/slices/auth";
 import LoginScreen from "@/pages/auth/login";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TabBar from "@/components/TabBar";
-import HomeIcon from "@/assets/icons/home.svg";
-import PrayIcon from "@/assets/icons/pray.svg";
 import PrayScreen from "@/pages/root/pray";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import ProfileScreen from "@/pages/root/profile";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import Foundation from "@expo/vector-icons/Foundation";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +26,7 @@ const RouterContainer = () => {
   }, []);
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={{ marginTop: 16 }}>
       <NavigationContainer>
         {isAuthenticated ? (
           <Tab.Navigator
@@ -36,13 +37,8 @@ const RouterContainer = () => {
               name="Home"
               component={HomeScreen}
               options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  <HomeIcon
-                    fill={color}
-                    width={size}
-                    height={size}
-                    focusable={focused}
-                  />
+                tabBarIcon: ({ color, size }) => (
+                  <Foundation name="home" size={size} color={color} />
                 ),
               }}
             />
@@ -50,13 +46,21 @@ const RouterContainer = () => {
               name="Pray"
               component={PrayScreen}
               options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  <PrayIcon
-                    fill={color}
-                    width={size}
-                    height={size}
-                    focusable={focused}
+                tabBarIcon: ({ color, size }) => (
+                  <FontAwesome5
+                    name="praying-hands"
+                    size={size}
+                    color={color}
                   />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Profile"
+              component={ProfileScreen}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <MaterialIcons name="person" size={size} color={color} />
                 ),
               }}
             />

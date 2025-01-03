@@ -1,19 +1,22 @@
 import {
   createPost,
   getAndPutPosts,
+  PostReducerType,
   usePost,
 } from "@/config/redux/slices/post";
 import PaginatedList from "@/components/PaginatedList";
 import Post from "@/components/Post";
-import { TextInput, View } from "react-native";
+import { Image, TextInput, View } from "react-native";
 import { useState } from "react";
-import { Button, Text } from "@rneui/themed";
+import { Avatar, Button, Text } from "@rneui/themed";
 import { toastSuccess } from "@/utils/toast";
+import { useAuth } from "@/config/redux/slices/auth";
 
 const WritePost = ({ onNewPost }: { onNewPost: (id: string) => void }) => {
   const [comment, setComment] = useState("");
   const [title, setTitle] = useState("");
   const { dispatch } = usePost();
+  const { user } = useAuth();
 
   const handleReset = () => {
     setComment("");
@@ -32,14 +35,19 @@ const WritePost = ({ onNewPost }: { onNewPost: (id: string) => void }) => {
   return (
     <View className="flex flex-col gap-2 px-3">
       <View className="flex flex-row gap-2 items-center">
-        <View className="w-6 h-6 bg-black rounded-full" />
+        <Avatar
+          rounded
+          source={{ uri: user?.avatar_url || "" }}
+          size="small"
+          containerStyle={{ borderWidth: 1, borderColor: "primary" }}
+        />
         <Text style={{ fontSize: 16 }}>Đăng bài viết của bạn...</Text>
       </View>
       <View className="flex flex-col  ml-8 gap-2 flex-1">
         <TextInput
           value={title}
           onChangeText={setTitle}
-          className="outline-none border-[1px] p-3"
+          className="outline-none border-[1px] p-3 rounded-[8px]"
           placeholder="Tiêu đề"
           placeholderTextColor={"#e9e9e9"}
         />
@@ -48,7 +56,7 @@ const WritePost = ({ onNewPost }: { onNewPost: (id: string) => void }) => {
           numberOfLines={5}
           value={comment}
           onChangeText={setComment}
-          className="outline-none border-[1px] p-3 h-[40px] flex-1"
+          className="outline-none border-[1px] p-3 h-[80px] flex-1 rounded-[8px]"
           placeholder="Nội dung"
           placeholderTextColor={"#e9e9e9"}
         />
@@ -74,17 +82,27 @@ const HomeScreen = () => {
 
   return (
     <View className="flex flex-col flex-1 pt-3 bg-[#fff]">
-      <WritePost
-        onNewPost={(id: string) => setHighlights((prev) => [...prev, id])}
-      />
       <PaginatedList
-        data={items}
+        data={[{}, ...items]}
         total_items={total_items}
         total_pages={total_pages}
         current_page={current_page}
         per_page={10}
         isLoading={isLoading}
-        renderItem={({ item }) => <Post {...item} />}
+        renderItem={({ item }) =>
+          (item as PostReducerType)?.id ? (
+            <Post
+              {...(item as PostReducerType)}
+              isHighlight={highlights.includes(
+                (item as PostReducerType).id.toString()
+              )}
+            />
+          ) : (
+            <WritePost
+              onNewPost={(id) => setHighlights((prev) => [...prev, id])}
+            />
+          )
+        }
         fetchData={(params) => {
           dispatch(getAndPutPosts(params));
         }}

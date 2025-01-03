@@ -10015,6 +10015,11 @@ react-native-css-interop@0.1.22:
     lightningcss "^1.27.0"
     semver "^7.6.3"
 
+react-native-date-picker@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-5.0.8.tgz"
+  integrity sha512-1l4w4+iLuhOZUSyQrt5DclXnNx3RwEyp+wUrSaBfaHr/3FWtRWjLjS0E9FL4FWuq6vn09Hy9hn8lZJ1DmPc9YQ==
+
 react-native-dialog@^9.3.0:
   version "9.3.0"
   resolved "https://registry.npmjs.org/react-native-dialog/-/react-native-dialog-9.3.0.tgz"
@@ -10053,6 +10058,11 @@ react-native-helmet-async@2.0.4:
     invariant "^2.2.4"
     react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
+
+react-native-image-picker@^7.2.3:
+  version "7.2.3"
+  resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-7.2.3.tgz"
+  integrity sha512-zKIZUlQNU3EtqizsXSH92zPeve4vpUrsqHu2kkpCxWE9TZhJFZBb+irDsBOY8J21k0+Edgt06TMQGJ+iPUIXyA==
 
 react-native-ratings@^8.1.0:
   version "8.1.0"
@@ -10160,7 +10170,7 @@ react-native-webrtc@^124.0.4:
     debug "4.3.4"
     event-target-shim "6.0.2"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", react-native@>=0.59.0, react-native@>=0.60.0, react-native@>=0.63.0, react-native@>=0.64.0, react-native@0.74.5:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.64.3", react-native@>=0.59.0, react-native@>=0.60.0, react-native@>=0.63.0, react-native@>=0.64.0, react-native@0.74.5:
   version "0.74.5"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.5.tgz"
   integrity sha512-Bgg2WvxaGODukJMTZFTZBNMKVaROHLwSb8VAGEdrlvKwfb1hHg/3aXTUICYk7dwgAnb+INbGMwnF8yeAgIUmqw==
@@ -10261,7 +10271,7 @@ react-test-renderer@18.2.0:
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.6.0 || ^17.0.0 || ^18.0.0", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.9.0 || ^17.0.0 || ^18 || ^19", "react@^18.0 || ^19", react@^18.0.0, react@^18.2.0, react@>=16.8, "react@>=16.8 || ^17.0.0 || ^18.0.0", react@>=16.8.0, react@>=17.0.0, react@>=18, react@>=18.0.0, react@18.2.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.6.0 || ^17.0.0 || ^18.0.0", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.9.0 || ^17.0.0 || ^18 || ^19", "react@^18.0 || ^19", react@^18.0.0, react@^18.2.0, "react@>= 17.0.1", react@>=16.8, "react@>=16.8 || ^17.0.0 || ^18.0.0", react@>=16.8.0, react@>=17.0.0, react@>=18, react@>=18.0.0, react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
